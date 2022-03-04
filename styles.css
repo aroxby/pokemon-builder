@@ -1,8 +1,15 @@
 .app {
     background-color: #cccccc;
-    padding: 10px;
+}
+
+.control {
+    padding: 5px;
 }
 
 .control div {
     display: inline;
+}
+
+#pokedexNumber {
+    font-weight: bold;
 }
