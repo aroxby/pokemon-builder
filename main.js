@@ -43,10 +43,11 @@ function fillSpeciesEntry(order, names) {
 function regeneratePokemonData(entry) {
     const defaultLevel = 1;
     const species = Number(entry.value);
+    const pokdexNumber = entry.selectedIndex;
     const baseStats = getPokemonBaseStats()[species];
 
     const pokemon = new Pokemon(species, defaultLevel, baseStats);
-    updatePokedexNumber(pokemon.species);
+    updatePokedexNumber(pokdexNumber);
     updateLevel(pokemon.level);
     updateStats(pokemon);
 }
@@ -58,8 +59,7 @@ function updateStats(pokemon) {
     updateHp(hpStat);
 }
 
-function updatePokedexNumber(species) {
-    const number = getPokedexOrder().indexOf(species);
+function updatePokedexNumber(number) {
     label = document.getElementById('pokedexNumber');
     label.innerHTML = number.toString().padStart(3, '0');
 }
