@@ -53,10 +53,7 @@ function regeneratePokemonData(entry) {
 }
 
 function updateStats(pokemon) {
-    const hpStat = calcStat(
-        pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level, true
-    );
-    updateHp(hpStat);
+    updateHpStats(pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level);
 }
 
 function updatePokedexNumber(number) {
@@ -69,7 +66,30 @@ function updateLevel(level) {
     input.value = level;
 }
 
-function updateHp(hpStat) {
+function updateHpStats(hpBaseStat, HpIv, HpStatExp, level) {
+    const hpStat = calcStat(hpBaseStat, HpIv, HpStatExp, level, true);
+    updateHpBaseStat(hpBaseStat);
+    updateHpIv(HpIv);
+    updateHpStatExp(HpStatExp);
+    updateHpStat(hpStat);
+}
+
+function updateHpBaseStat(hpStat) {
+    input = document.getElementById('hpBaseStatOutput');
+    input.value = hpStat;
+}
+
+function updateHpIv(hpStat) {
+    input = document.getElementById('hpIvOutput');
+    input.value = hpStat;
+}
+
+function updateHpStatExp(hpStat) {
+    input = document.getElementById('hpStatExpOutput');
+    input.value = hpStat;
+}
+
+function updateHpStat(hpStat) {
     input = document.getElementById('hpOutput');
     input.value = hpStat;
 }
