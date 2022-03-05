@@ -11,6 +11,7 @@ let loadedFiles = {
     'dex': false,
     'basestats': false,
     'stats': false,
+    'pokemon': false,
 };
 
 function lateInit() {
@@ -41,21 +42,24 @@ function fillSpeciesEntry(order, names) {
 
 function regeneratePokemonData(entry) {
     const defaultLevel = 1;
-    const species = entry.value;
+    const species = Number(entry.value);
     const baseStats = getPokemonBaseStats()[species];
-    console.warn(baseStats);
 
-    const level = defaultLevel;
-    const hpIv = 0;  // HACK
-    const hpExp = 0;  // HACK
-    const hpStat = calcStat(baseStats['hp'], hpIv, hpExp, level, true);
+    const pokemon = new Pokemon(species, defaultLevel, baseStats);
+    updatePokedexNumber(pokemon.species);
+    updateLevel(pokemon.level);
+    updateStats(pokemon);
+}
 
-    updatePokedexNumber(species);
-    updateLevel(level);
+function updateStats(pokemon) {
+    const hpStat = calcStat(
+        pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level, true
+    );
     updateHp(hpStat);
 }
 
-function updatePokedexNumber(number) {
+function updatePokedexNumber(species) {
+    const number = getPokedexOrder().indexOf(species);
     label = document.getElementById('pokedexNumber');
     label.innerHTML = number.toString().padStart(3, '0');
 }
@@ -84,5 +88,9 @@ loadScript('basestats.js', () => {  // getPokemonBaseStats()
 });
 loadScript('stats.js', () => {  // calcStat()
     loadedFiles['stats'] = true;
+    lateInit();
+});
+loadScript('pokemon.js', () => {  // class Pokemon
+    loadedFiles['pokemon'] = true;
     lateInit();
 });
