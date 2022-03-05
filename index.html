@@ -8,38 +8,71 @@
 </head>
 <body>
     <div class="app">
-        <div class="control">
-            <div class="label">
-                species
+        <fieldset>
+            <legend>Basic</legend>
+            <div class="control">
+                <div class="label">
+                    species
+                </div>
+                <div class="input">
+                    <select id="speciesEntry"></select>
+                </div>
+                <div class="spacer">
+                    &nbsp;
+                </div>
+                <div class="label">
+                    No.
+                </div>
+                <div class="label" id="pokedexNumber">
+                </div>
             </div>
-            <div class="input">
-                <select id="speciesEntry"></select>
+            <div class="control">
+                <div class="label">
+                    Level
+                </div>
+                <div class="input">
+                    <input id="levelOutput" disabled/>
+                </div>
             </div>
-            <div class="spacer">
-                &nbsp;
-            </div>
-            <div class="label">
-                No.
-            </div>
-            <div class="label" id="pokedexNumber">
-            </div>
-        </div>
-        <div class="control">
-            <div class="label">
-                Level
-            </div>
-            <div class="input">
-                <input id="levelOutput" disabled/>
-            </div>
-        </div>
-        <div class="control">
-            <div class="label">
-                HP
-            </div>
-            <div class="input">
-                <input id="hpOutput" disabled/>
-            </div>
-        </div>
+        </fieldset>
+        <fieldset>
+            <legend>Stats</legend>
+            <fieldset>
+                <legend>HP</legend>
+                <div class="control">
+                    <div class="spacer">
+                        &nbsp;
+                    </div>
+                    <div class="label">
+                        BaseStat
+                    </div>
+                    <div class="input">
+                        <input id="hpBaseStatOutput" disabled/>
+                    </div>
+                    <div class="label">
+                        IV
+                    </div>
+                    <div class="input">
+                        <input id="hpIvOutput" disabled/>
+                    </div>
+                    <div class="label">
+                        StatExp
+                    </div>
+                    <div class="input">
+                        <input id="hpStatExpOutput" disabled/>
+                    </div>
+                    <div class="spacer">
+                        &nbsp;
+                    </div>
+                    <div class="label">
+                        Max HP
+                    </div>
+                    <div class="input">
+                        <input id="hpOutput" disabled/>
+                    </div>
+                </div>
+            </fieldset>
+        </fieldset>
     </div>
 </body>
 <script src="./main.js"></script>

@@ -13,3 +13,7 @@
 #pokedexNumber {
     font-weight: bold;
 }
+
+input {
+    width: 50px;
+}
