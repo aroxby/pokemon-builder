@@ -52,10 +52,6 @@ function regeneratePokemonData(entry) {
     updateStats(pokemon);
 }
 
-function updateStats(pokemon) {
-    updateHpStats(pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level);
-}
-
 function updatePokedexNumber(number) {
     label = document.getElementById('pokedexNumber');
     label.innerHTML = number.toString().padStart(3, '0');
@@ -66,32 +62,75 @@ function updateLevel(level) {
     input.value = level;
 }
 
-function updateHpStats(hpBaseStat, HpIv, HpStatExp, level) {
-    const hpStat = calcStat(hpBaseStat, HpIv, HpStatExp, level, true);
-    updateHpBaseStat(hpBaseStat);
-    updateHpIv(HpIv);
-    updateHpStatExp(HpStatExp);
-    updateHpStat(hpStat);
+
+function updateStats(pokemon) {
+    updateHpStats(
+        pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level
+    );
+    updateAttackStats(
+        pokemon.baseStats.attack, pokemon.ivs.attack, pokemon.statExp.attack, pokemon.level
+    );
+    updateDefenseStats(
+        pokemon.baseStats.defense, pokemon.ivs.defense, pokemon.statExp.defense, pokemon.level
+    );
+    updateSpecialStats(
+        pokemon.baseStats.special, pokemon.ivs.special, pokemon.statExp.special, pokemon.level
+    );
+    updateSpeedStats(
+        pokemon.baseStats.speed, pokemon.ivs.speed, pokemon.statExp.speed, pokemon.level
+    );
 }
 
-function updateHpBaseStat(hpStat) {
-    input = document.getElementById('hpBaseStatOutput');
-    input.value = hpStat;
+function updateHpStats(baseStat, iv, statExp, level) {
+    const finalStat = calcStat(baseStat, iv, statExp, level, true);
+    updateStatGroup('hp', baseStat, iv, statExp, finalStat);
 }
 
-function updateHpIv(hpStat) {
-    input = document.getElementById('hpIvOutput');
-    input.value = hpStat;
+function updateAttackStats(baseStat, iv, statExp, level) {
+    const finalStat = calcStat(baseStat, iv, statExp, level, false);
+    updateStatGroup('attack', baseStat, iv, statExp, finalStat);
 }
 
-function updateHpStatExp(hpStat) {
-    input = document.getElementById('hpStatExpOutput');
-    input.value = hpStat;
+function updateDefenseStats(baseStat, iv, statExp, level) {
+    const finalStat = calcStat(baseStat, iv, statExp, level, false);
+    updateStatGroup('defense', baseStat, iv, statExp, finalStat);
 }
 
-function updateHpStat(hpStat) {
-    input = document.getElementById('hpOutput');
-    input.value = hpStat;
+function updateSpecialStats(baseStat, iv, statExp, level) {
+    const finalStat = calcStat(baseStat, iv, statExp, level, false);
+    updateStatGroup('special', baseStat, iv, statExp, finalStat);
+}
+
+function updateSpeedStats(baseStat, iv, statExp, level) {
+    const finalStat = calcStat(baseStat, iv, statExp, level, false);
+    updateStatGroup('speed', baseStat, iv, statExp, finalStat);
+}
+
+function updateStatGroup(name, baseStat, iv, statExp, finalStat) {
+    updateBaseStat(name, baseStat);
+    updateIv(name, iv);
+    updateHpStatExp(name, statExp);
+    updateFinalStat(name, finalStat);
+}
+
+function updateBaseStat(name, stat) {
+    input = document.getElementById(name + 'BaseStatOutput');
+    input.value = stat;
+}
+
+function updateIv(name, stat) {
+    input = document.getElementById(name + 'IvOutput');
+    input.value = stat;
+}
+
+function updateHpStatExp(name, stat) {
+    input = document.getElementById(name + 'StatExpOutput');
+    input.value = stat;
+}
+
+function updateFinalStat(name, stat) {
+    input = document.getElementById(name + 'Output');
+    input.value = stat;
 }
 
 loadScript('names.js', () => {  // getPokemonNames()
