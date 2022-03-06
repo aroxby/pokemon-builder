@@ -1,3 +1,7 @@
+function clamp(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+}
+
 function loadScript(url, callback) {
     const head = document.head;
     const script = document.createElement('script');
@@ -6,26 +10,41 @@ function loadScript(url, callback) {
     head.appendChild(script);
 }
 
-function clamp(val, min, max) {
-    return Math.min(Math.max(val, min), max);
+function requireFiles(files, callback) {
+    function maybeCallback() {
+        if(Object.values(loadedFiles).every((elem) => elem)) {
+            callback();
+        }
+    }
+
+    const loadedFiles = {};
+    files.map((file) => {
+        loadedFiles[file] = false;
+        loadScript((file), () => {
+            loadedFiles[file] = true;
+            maybeCallback();
+        });
+    });
 }
 
-const loadedFiles = {
-    'names': false,
-    'dex': false,
-    'basestats': false,
-    'stats': false,
-    'pokemon': false,
-};
+const requiredFiles = [
+    'names.js',
+    'dex.js',
+    'basestats.js',
+    'stats.js',
+    'pokemon.js',
+    'pokemonIds.js',
+];
+
+requireFiles(requiredFiles, lateInit);
+
 
 function lateInit() {
-    if(
-        Object.values(loadedFiles).some((elem) => !elem)
-    ) {
-        return;
-    } else {
-        fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
-    }
+    fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
+    setupHandlers();
+
+    const speciesEntry = document.getElementById('speciesEntry');
+    regeneratePokemonDataFromSpeciesControl(speciesEntry);
 }
 
 function fillSpeciesEntry(order, names) {
@@ -36,11 +55,12 @@ function fillSpeciesEntry(order, names) {
         option.innerHTML = names[species];
         speciesEntry.appendChild(option);
     }
-
     speciesEntry.selectedIndex = 0;    // Start at pokedex #1
+}
 
+function setupHandlers() {
+    const speciesEntry = document.getElementById('speciesEntry');
     speciesEntry.onchange = () => regeneratePokemonDataFromSpeciesControl(speciesEntry);
-    regeneratePokemonDataFromSpeciesControl(speciesEntry);
 
     const levelControl = document.getElementById('levelControl');
     levelControl.onchange = () => regeneratePokemonDataFromLevelControl(levelControl);
@@ -156,26 +176,3 @@ function updateFinalStat(name, stat) {
     const input = document.getElementById(name + 'Output');
     input.value = stat;
 }
-
-loadScript('pokemonIds.js', () => {  // const PokemonIds
-    loadScript('dex.js', () => {  // getPokedexOrder()
-        loadedFiles['dex'] = true;
-        lateInit();
-    });
-});
-loadScript('names.js', () => {  // getPokemonNames()
-    loadedFiles['names'] = true;
-    lateInit();
-});
-loadScript('basestats.js', () => {  // getPokemonBaseStats()
-    loadedFiles['basestats'] = true;
-    lateInit();
-});
-loadScript('stats.js', () => {  // calcStat()
-    loadedFiles['stats'] = true;
-    lateInit();
-});
-loadScript('pokemon.js', () => {  // class Pokemon
-    loadedFiles['pokemon'] = true;
-    lateInit();
-});
