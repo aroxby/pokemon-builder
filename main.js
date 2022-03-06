@@ -37,60 +37,63 @@ const requiredFiles = [
 ];
 
 requireFiles(requiredFiles, lateInit);
+/* Globals, we'll create an app object to track all this state later */
+const speciesEntry = document.getElementById('speciesEntry');
+const levelControl = document.getElementById('levelControl');
+/* End globals */
 
 
 function lateInit() {
     fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
+    fillDefaultSpecies();
+    fillDefaultLevel();
     setupHandlers();
-
-    const speciesEntry = document.getElementById('speciesEntry');
-    regeneratePokemonDataFromSpeciesControl(speciesEntry);
+    updatePokemonDataFromSpeciesControl(speciesEntry);
 }
 
 function fillSpeciesEntry(order, names) {
-    const speciesEntry = document.getElementById('speciesEntry');
     for(const species of order) {
         const option = document.createElement("option");
         option.value = species;
         option.innerHTML = names[species];
         speciesEntry.appendChild(option);
     }
-    speciesEntry.selectedIndex = 0;    // Start at pokedex #1
+}
+
+function fillDefaultSpecies() {
+    // Start at pokedex #1
+    speciesEntry.selectedIndex = 0;
+}
+
+function fillDefaultLevel() {
+    updateLevel(1);
 }
 
 function setupHandlers() {
-    const speciesEntry = document.getElementById('speciesEntry');
-    speciesEntry.onchange = () => regeneratePokemonDataFromSpeciesControl(speciesEntry);
-
-    const levelControl = document.getElementById('levelControl');
-    levelControl.onchange = () => regeneratePokemonDataFromLevelControl(levelControl);
+    speciesEntry.onchange = () => updatePokemonDataFromSpeciesControl(speciesEntry);
+    levelControl.onchange = () => updatePokemonDataFromLevelControl(levelControl);
 }
 
-function regeneratePokemonDataFromSpeciesControl(speciesEntry) {
+function updatePokemonDataFromSpeciesControl(speciesEntry) {
     const species = Number(speciesEntry.value);
     const pokedexNumber = speciesEntry.selectedIndex + 1;
-    regeneratePokemonDataFromSpecies(species, pokedexNumber);
+    updatePokemonDataFromSpecies(species, pokedexNumber);
 }
 
-function regeneratePokemonDataFromLevelControl() {
-    const speciesEntry = document.getElementById('speciesEntry');
-    const levelControl = document.getElementById('levelControl');
+function updatePokemonDataFromLevelControl() {
     const species = Number(speciesEntry.value);
     const rawlevel = Number(levelControl.value);
     const level = Math.round(clamp(rawlevel, 0, 255));
     updateLevel(level);
-    regeneratePokemonDataFromLevel(species, level);
+    updatePokemonDataFromLevel(species, level);
 }
 
-function regeneratePokemonDataFromSpecies(species, pokedexNumber) {
-    const defaultLevel = 1;
-
+function updatePokemonDataFromSpecies(species, pokedexNumber) {
     updatePokedexNumber(pokedexNumber);
-    updateLevel(defaultLevel);
-    regeneratePokemonDataFromLevel(species, defaultLevel);
+    updatePokemonDataFromLevelControl();
 }
 
-function regeneratePokemonDataFromLevel(species, level) {
+function updatePokemonDataFromLevel(species, level) {
     const baseStats = getPokemonBaseStats()[species];
     const pokemon = new Pokemon(species, level, baseStats);
     updateStats(pokemon);
@@ -102,8 +105,7 @@ function updatePokedexNumber(number) {
 }
 
 function updateLevel(level) {
-    const input = document.getElementById('levelControl');
-    input.value = level;
+    levelControl.value = level;
 }
 
 
