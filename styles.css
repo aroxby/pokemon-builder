@@ -15,5 +15,5 @@
 }
 
 input {
-    width: 50px;
+    width: 40px;  /* HACK: Larger boxes line up better on mobile */
 }
