@@ -1330,13 +1330,6 @@ function getPokemonBaseStats() {
             "special": 100,
             "speed": 70
         },
-        {
-            "attack": 136,
-            "defense": 0,
-            "hp": 33,
-            "special": 6,
-            "speed": 29
-        },
     ];
 
     return baseStats;

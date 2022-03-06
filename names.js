@@ -190,7 +190,6 @@ function getPokemonNames() {
         'Bellsprout',
         'Weepinbell',
         'Victreebel',
-        'MissingNo.',
     ];
     return names;
 }
