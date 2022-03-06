@@ -1,6 +1,13 @@
 function getPokemonBaseStats() {
     const baseStats = [
         {
+            "attack": 136,
+            "defense": 0,
+            "hp": 33,
+            "special": 6,
+            "speed": 29
+        },
+        {
             "attack": 130,
             "defense": 120,
             "hp": 105,

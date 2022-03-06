@@ -33,8 +33,7 @@ function fillSpeciesEntry(order, names) {
         entry.appendChild(option);
     }
 
-    const defaultIndex = 1;  // Pokedex value for bulbasaur
-    entry.selectedIndex = defaultIndex;
+    entry.selectedIndex = 0;    // Start at pokedex #1
 
     entry.onchange = () => regeneratePokemonData(entry);
     regeneratePokemonData(entry);
@@ -43,7 +42,7 @@ function fillSpeciesEntry(order, names) {
 function regeneratePokemonData(entry) {
     const defaultLevel = 1;
     const species = Number(entry.value);
-    const pokdexNumber = entry.selectedIndex;
+    const pokdexNumber = entry.selectedIndex + 1;
     const baseStats = getPokemonBaseStats()[species];
 
     const pokemon = new Pokemon(species, defaultLevel, baseStats);
@@ -133,12 +132,14 @@ function updateFinalStat(name, stat) {
     input.value = stat;
 }
 
+loadScript('pokemonIds.js', () => {  // const PokemonIds
+    loadScript('dex.js', () => {  // getPokedexOrder()
+        loadedFiles['dex'] = true;
+        lateInit();
+    });
+});
 loadScript('names.js', () => {  // getPokemonNames()
     loadedFiles['names'] = true;
-    lateInit();
-});
-loadScript('dex.js', () => {  // getPokedexOrder()
-    loadedFiles['dex'] = true;
     lateInit();
 });
 loadScript('basestats.js', () => {  // getPokemonBaseStats()

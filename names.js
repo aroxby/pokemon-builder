@@ -1,5 +1,6 @@
 function getPokemonNames() {
     const names = [
+        'MissingNo.',
         'Rhydon',
         'Kangaskhan',
         'Nidoran&#9794;',
