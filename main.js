@@ -6,6 +6,10 @@ function loadScript(url, callback) {
     head.appendChild(script);
 }
 
+function clamp(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+}
+
 const loadedFiles = {
     'names': false,
     'dex': false,
@@ -52,7 +56,9 @@ function regeneratePokemonDataFromLevelControl() {
     const speciesEntry = document.getElementById('speciesEntry');
     const levelControl = document.getElementById('levelControl');
     const species = Number(speciesEntry.value);
-    const level = Number(levelControl.value);
+    const rawlevel = Number(levelControl.value);
+    const level = Math.round(clamp(rawlevel, 0, 255));
+    updateLevel(level);
     regeneratePokemonDataFromLevel(species, level);
 }
 
