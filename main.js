@@ -32,6 +32,12 @@ class App {
         this.speciesEntry = document.getElementById('speciesEntry');
         this.levelControl = document.getElementById('levelControl');
 
+        const defaultSpecies = PokemonIds.BULBASAUR;
+        const defaultLevel = 1;
+        this.pokemon = new Pokemon(
+            defaultSpecies, defaultLevel, getPokemonBaseStats()[defaultSpecies]
+        );
+
         this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
         this.fillDefaultSpecies();
         this.fillDefaultLevel();
@@ -49,42 +55,41 @@ class App {
     }
 
     fillDefaultSpecies() {
-        // Start at pokedex #1
-        this.speciesEntry.selectedIndex = 0;
+        this.speciesEntry.value = this.pokemon.species;
     }
 
     fillDefaultLevel() {
-        this.updateLevel(1);
+        this.updateLevel(this.pokemon.level);
     }
 
     setupHandlers() {
-        this.speciesEntry.onchange = () => this.updatePokemonDataFromSpeciesControl(speciesEntry);
-        this.levelControl.onchange = () => this.updatePokemonDataFromLevelControl(levelControl);
+        this.speciesEntry.onchange = () => this.updatePokemonDataFromSpeciesControl();
+        this.levelControl.onchange = () => this.updatePokemonDataFromLevelControl();
     }
 
-    updatePokemonDataFromSpeciesControl(speciesEntry) {
+    updatePokemonDataFromSpeciesControl() {
         const species = Number(this.speciesEntry.value);
         const pokedexNumber = this.speciesEntry.selectedIndex + 1;
         this.updatePokemonDataFromSpecies(species, pokedexNumber);
     }
 
     updatePokemonDataFromLevelControl() {
-        const species = Number(this.speciesEntry.value);
         const rawlevel = Number(this.levelControl.value);
         const level = Math.round(clamp(rawlevel, 0, 255));
         this.updateLevel(level);
-        this.updatePokemonDataFromLevel(species, level);
+        this.updatePokemonDataFromLevel(this.pokemon.species, level);
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {
+        this.pokemon.species = species;
+        this.pokemon.baseStats = getPokemonBaseStats()[species];
         this.updatePokedexNumber(pokedexNumber);
-        this.updatePokemonDataFromLevelControl();
+        this.updateStats(this.pokemon);
     }
 
     updatePokemonDataFromLevel(species, level) {
-        const baseStats = getPokemonBaseStats()[species];
-        const pokemon = new Pokemon(species, level, baseStats);
-        this.updateStats(pokemon);
+        this.pokemon.level = level;
+        this.updateStats(this.pokemon);
     }
 
     updatePokedexNumber(number) {
