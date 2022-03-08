@@ -29,8 +29,29 @@ function requireFiles(files, callback) {
 
 class App {
     constructor() {
-        this.speciesEntry = document.getElementById('speciesEntry');
-        this.levelControl = document.getElementById('levelControl');
+        this.controls = {
+            species: document.getElementById('speciesEntry'),
+            level: document.getElementById('levelControl'),
+            pokedex: document.getElementById('pokedexNumber'),
+            baseStats: {},
+            ivs: {},
+            statExp: {},
+            stats: {},
+        };
+        for(const statGroup of ['hp', 'attack', 'defense', 'special', 'speed']) {
+            this.controls.baseStats[statGroup] = document.getElementById(
+                statGroup + 'BaseStatOutput'
+            );
+            this.controls.ivs[statGroup] = document.getElementById(
+                statGroup + 'IvOutput'
+            );
+            this.controls.statExp[statGroup] = document.getElementById(
+                statGroup + 'StatExpOutput'
+            );
+            this.controls.stats[statGroup] = document.getElementById(
+                statGroup + 'Output'
+            );
+        };
 
         const defaultSpecies = PokemonIds.BULBASAUR;
         const defaultLevel = 1;
@@ -42,7 +63,8 @@ class App {
         this.fillDefaultSpecies();
         this.fillDefaultLevel();
         this.setupHandlers();
-        this.updatePokemonDataFromSpeciesControl(speciesEntry);
+        // this is used instead of updateStats so the pokedex number gets set
+        this.updatePokemonDataFromSpeciesControl();
     }
 
     fillSpeciesEntry(order, names) {
@@ -50,12 +72,12 @@ class App {
             const option = document.createElement("option");
             option.value = species;
             option.innerHTML = names[species];
-            this.speciesEntry.appendChild(option);
+            this.controls.species.appendChild(option);
         }
     }
 
     fillDefaultSpecies() {
-        this.speciesEntry.value = this.pokemon.species;
+        this.controls.species.value = this.pokemon.species;
     }
 
     fillDefaultLevel() {
@@ -63,18 +85,18 @@ class App {
     }
 
     setupHandlers() {
-        this.speciesEntry.onchange = () => this.updatePokemonDataFromSpeciesControl();
-        this.levelControl.onchange = () => this.updatePokemonDataFromLevelControl();
+        this.controls.species.onchange = () => this.updatePokemonDataFromSpeciesControl();
+        this.controls.level.onchange = () => this.updatePokemonDataFromLevelControl();
     }
 
     updatePokemonDataFromSpeciesControl() {
-        const species = Number(this.speciesEntry.value);
-        const pokedexNumber = this.speciesEntry.selectedIndex + 1;
+        const species = Number(this.controls.species.value);
+        const pokedexNumber = this.controls.species.selectedIndex + 1;
         this.updatePokemonDataFromSpecies(species, pokedexNumber);
     }
 
     updatePokemonDataFromLevelControl() {
-        const rawlevel = Number(this.levelControl.value);
+        const rawlevel = Number(this.controls.level.value);
         const level = Math.round(clamp(rawlevel, 0, 255));
         this.updateLevel(level);
         this.updatePokemonDataFromLevel(this.pokemon.species, level);
@@ -93,12 +115,11 @@ class App {
     }
 
     updatePokedexNumber(number) {
-        const label = document.getElementById('pokedexNumber');
-        label.innerHTML = number.toString().padStart(3, '0');
+        this.controls.pokedex.innerHTML = number.toString().padStart(3, '0');
     }
 
     updateLevel(level) {
-        this.levelControl.value = level;
+        this.controls.level.value = level;
     }
 
     updateHpStats(baseStat, iv, statExp, level) {
@@ -129,27 +150,27 @@ class App {
     updateStatGroup(name, baseStat, iv, statExp, finalStat) {
         this.updateBaseStat(name, baseStat);
         this.updateIv(name, iv);
-        this.updateHpStatExp(name, statExp);
+        this.updateStatExp(name, statExp);
         this.updateFinalStat(name, finalStat);
     }
 
     updateBaseStat(name, stat) {
-        const input = document.getElementById(name + 'BaseStatOutput');
+        const input = this.controls.baseStats[name];
         input.value = stat;
     }
 
     updateIv(name, stat) {
-        const input = document.getElementById(name + 'IvOutput');
+        const input = this.controls.ivs[name];
         input.value = stat;
     }
 
-    updateHpStatExp(name, stat) {
-        const input = document.getElementById(name + 'StatExpOutput');
+    updateStatExp(name, stat) {
+        const input = this.controls.statExp[name];
         input.value = stat;
     }
 
     updateFinalStat(name, stat) {
-        const input = document.getElementById(name + 'Output');
+        const input = this.controls.stats[name];
         input.value = stat;
     }
 
