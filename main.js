@@ -27,6 +27,146 @@ function requireFiles(files, callback) {
     });
 }
 
+class App {
+    constructor() {
+        this.speciesEntry = document.getElementById('speciesEntry');
+        this.levelControl = document.getElementById('levelControl');
+
+        this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
+        this.fillDefaultSpecies();
+        this.fillDefaultLevel();
+        this.setupHandlers();
+        this.updatePokemonDataFromSpeciesControl(speciesEntry);
+    }
+
+    fillSpeciesEntry(order, names) {
+        for(const species of order) {
+            const option = document.createElement("option");
+            option.value = species;
+            option.innerHTML = names[species];
+            this.speciesEntry.appendChild(option);
+        }
+    }
+
+    fillDefaultSpecies() {
+        // Start at pokedex #1
+        this.speciesEntry.selectedIndex = 0;
+    }
+
+    fillDefaultLevel() {
+        this.updateLevel(1);
+    }
+
+    setupHandlers() {
+        this.speciesEntry.onchange = () => this.updatePokemonDataFromSpeciesControl(speciesEntry);
+        this.levelControl.onchange = () => this.updatePokemonDataFromLevelControl(levelControl);
+    }
+
+    updatePokemonDataFromSpeciesControl(speciesEntry) {
+        const species = Number(this.speciesEntry.value);
+        const pokedexNumber = this.speciesEntry.selectedIndex + 1;
+        this.updatePokemonDataFromSpecies(species, pokedexNumber);
+    }
+
+    updatePokemonDataFromLevelControl() {
+        const species = Number(this.speciesEntry.value);
+        const rawlevel = Number(this.levelControl.value);
+        const level = Math.round(clamp(rawlevel, 0, 255));
+        this.updateLevel(level);
+        this.updatePokemonDataFromLevel(species, level);
+    }
+
+    updatePokemonDataFromSpecies(species, pokedexNumber) {
+        this.updatePokedexNumber(pokedexNumber);
+        this.updatePokemonDataFromLevelControl();
+    }
+
+    updatePokemonDataFromLevel(species, level) {
+        const baseStats = getPokemonBaseStats()[species];
+        const pokemon = new Pokemon(species, level, baseStats);
+        this.updateStats(pokemon);
+    }
+
+    updatePokedexNumber(number) {
+        const label = document.getElementById('pokedexNumber');
+        label.innerHTML = number.toString().padStart(3, '0');
+    }
+
+    updateLevel(level) {
+        this.levelControl.value = level;
+    }
+
+    updateHpStats(baseStat, iv, statExp, level) {
+        const finalStat = calcStat(baseStat, iv, statExp, level, true);
+        this.updateStatGroup('hp', baseStat, iv, statExp, finalStat);
+    }
+
+    updateAttackStats(baseStat, iv, statExp, level) {
+        const finalStat = calcStat(baseStat, iv, statExp, level, false);
+        this.updateStatGroup('attack', baseStat, iv, statExp, finalStat);
+    }
+
+    updateDefenseStats(baseStat, iv, statExp, level) {
+        const finalStat = calcStat(baseStat, iv, statExp, level, false);
+        this.updateStatGroup('defense', baseStat, iv, statExp, finalStat);
+    }
+
+    updateSpecialStats(baseStat, iv, statExp, level) {
+        const finalStat = calcStat(baseStat, iv, statExp, level, false);
+        this.updateStatGroup('special', baseStat, iv, statExp, finalStat);
+    }
+
+    updateSpeedStats(baseStat, iv, statExp, level) {
+        const finalStat = calcStat(baseStat, iv, statExp, level, false);
+        this.updateStatGroup('speed', baseStat, iv, statExp, finalStat);
+    }
+
+    updateStatGroup(name, baseStat, iv, statExp, finalStat) {
+        this.updateBaseStat(name, baseStat);
+        this.updateIv(name, iv);
+        this.updateHpStatExp(name, statExp);
+        this.updateFinalStat(name, finalStat);
+    }
+
+    updateBaseStat(name, stat) {
+        const input = document.getElementById(name + 'BaseStatOutput');
+        input.value = stat;
+    }
+
+    updateIv(name, stat) {
+        const input = document.getElementById(name + 'IvOutput');
+        input.value = stat;
+    }
+
+    updateHpStatExp(name, stat) {
+        const input = document.getElementById(name + 'StatExpOutput');
+        input.value = stat;
+    }
+
+    updateFinalStat(name, stat) {
+        const input = document.getElementById(name + 'Output');
+        input.value = stat;
+    }
+
+    updateStats(pokemon) {
+        this.updateHpStats(
+            pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level
+        );
+        this.updateAttackStats(
+            pokemon.baseStats.attack, pokemon.ivs.attack, pokemon.statExp.attack, pokemon.level
+        );
+        this.updateDefenseStats(
+            pokemon.baseStats.defense, pokemon.ivs.defense, pokemon.statExp.defense, pokemon.level
+        );
+        this.updateSpecialStats(
+            pokemon.baseStats.special, pokemon.ivs.special, pokemon.statExp.special, pokemon.level
+        );
+        this.updateSpeedStats(
+            pokemon.baseStats.speed, pokemon.ivs.speed, pokemon.statExp.speed, pokemon.level
+        );
+    }
+};
+
 const requiredFiles = [
     'names.js',
     'dex.js',
@@ -36,145 +176,4 @@ const requiredFiles = [
     'pokemonIds.js',
 ];
 
-requireFiles(requiredFiles, lateInit);
-/* Globals, we'll create an app object to track all this state later */
-const speciesEntry = document.getElementById('speciesEntry');
-const levelControl = document.getElementById('levelControl');
-/* End globals */
-
-
-function lateInit() {
-    fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
-    fillDefaultSpecies();
-    fillDefaultLevel();
-    setupHandlers();
-    updatePokemonDataFromSpeciesControl(speciesEntry);
-}
-
-function fillSpeciesEntry(order, names) {
-    for(const species of order) {
-        const option = document.createElement("option");
-        option.value = species;
-        option.innerHTML = names[species];
-        speciesEntry.appendChild(option);
-    }
-}
-
-function fillDefaultSpecies() {
-    // Start at pokedex #1
-    speciesEntry.selectedIndex = 0;
-}
-
-function fillDefaultLevel() {
-    updateLevel(1);
-}
-
-function setupHandlers() {
-    speciesEntry.onchange = () => updatePokemonDataFromSpeciesControl(speciesEntry);
-    levelControl.onchange = () => updatePokemonDataFromLevelControl(levelControl);
-}
-
-function updatePokemonDataFromSpeciesControl(speciesEntry) {
-    const species = Number(speciesEntry.value);
-    const pokedexNumber = speciesEntry.selectedIndex + 1;
-    updatePokemonDataFromSpecies(species, pokedexNumber);
-}
-
-function updatePokemonDataFromLevelControl() {
-    const species = Number(speciesEntry.value);
-    const rawlevel = Number(levelControl.value);
-    const level = Math.round(clamp(rawlevel, 0, 255));
-    updateLevel(level);
-    updatePokemonDataFromLevel(species, level);
-}
-
-function updatePokemonDataFromSpecies(species, pokedexNumber) {
-    updatePokedexNumber(pokedexNumber);
-    updatePokemonDataFromLevelControl();
-}
-
-function updatePokemonDataFromLevel(species, level) {
-    const baseStats = getPokemonBaseStats()[species];
-    const pokemon = new Pokemon(species, level, baseStats);
-    updateStats(pokemon);
-}
-
-function updatePokedexNumber(number) {
-    const label = document.getElementById('pokedexNumber');
-    label.innerHTML = number.toString().padStart(3, '0');
-}
-
-function updateLevel(level) {
-    levelControl.value = level;
-}
-
-
-function updateStats(pokemon) {
-    updateHpStats(
-        pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level
-    );
-    updateAttackStats(
-        pokemon.baseStats.attack, pokemon.ivs.attack, pokemon.statExp.attack, pokemon.level
-    );
-    updateDefenseStats(
-        pokemon.baseStats.defense, pokemon.ivs.defense, pokemon.statExp.defense, pokemon.level
-    );
-    updateSpecialStats(
-        pokemon.baseStats.special, pokemon.ivs.special, pokemon.statExp.special, pokemon.level
-    );
-    updateSpeedStats(
-        pokemon.baseStats.speed, pokemon.ivs.speed, pokemon.statExp.speed, pokemon.level
-    );
-}
-
-function updateHpStats(baseStat, iv, statExp, level) {
-    const finalStat = calcStat(baseStat, iv, statExp, level, true);
-    updateStatGroup('hp', baseStat, iv, statExp, finalStat);
-}
-
-function updateAttackStats(baseStat, iv, statExp, level) {
-    const finalStat = calcStat(baseStat, iv, statExp, level, false);
-    updateStatGroup('attack', baseStat, iv, statExp, finalStat);
-}
-
-function updateDefenseStats(baseStat, iv, statExp, level) {
-    const finalStat = calcStat(baseStat, iv, statExp, level, false);
-    updateStatGroup('defense', baseStat, iv, statExp, finalStat);
-}
-
-function updateSpecialStats(baseStat, iv, statExp, level) {
-    const finalStat = calcStat(baseStat, iv, statExp, level, false);
-    updateStatGroup('special', baseStat, iv, statExp, finalStat);
-}
-
-function updateSpeedStats(baseStat, iv, statExp, level) {
-    const finalStat = calcStat(baseStat, iv, statExp, level, false);
-    updateStatGroup('speed', baseStat, iv, statExp, finalStat);
-}
-
-function updateStatGroup(name, baseStat, iv, statExp, finalStat) {
-    updateBaseStat(name, baseStat);
-    updateIv(name, iv);
-    updateHpStatExp(name, statExp);
-    updateFinalStat(name, finalStat);
-}
-
-function updateBaseStat(name, stat) {
-    const input = document.getElementById(name + 'BaseStatOutput');
-    input.value = stat;
-}
-
-function updateIv(name, stat) {
-    const input = document.getElementById(name + 'IvOutput');
-    input.value = stat;
-}
-
-function updateHpStatExp(name, stat) {
-    const input = document.getElementById(name + 'StatExpOutput');
-    input.value = stat;
-}
-
-function updateFinalStat(name, stat) {
-    const input = document.getElementById(name + 'Output');
-    input.value = stat;
-}
+requireFiles(requiredFiles, () => new App());
