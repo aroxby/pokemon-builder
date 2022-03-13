@@ -30,7 +30,7 @@ function requireFiles(files, callback) {
 class App {
     constructor() {
         this.controls = {
-            species: document.getElementById('speciesEntry'),
+            species: document.getElementById('speciesControl'),
             level: document.getElementById('levelControl'),
             pokedex: document.getElementById('pokedexNumber'),
             baseStats: {},
@@ -40,16 +40,16 @@ class App {
         };
         for(const statGroup of ['hp', 'attack', 'defense', 'special', 'speed']) {
             this.controls.baseStats[statGroup] = document.getElementById(
-                statGroup + 'BaseStatOutput'
+                statGroup + 'BaseStatControl'
             );
             this.controls.ivs[statGroup] = document.getElementById(
-                statGroup + 'IvOutput'
+                statGroup + 'IvControl'
             );
             this.controls.statExp[statGroup] = document.getElementById(
-                statGroup + 'StatExpOutput'
+                statGroup + 'StatExpControl'
             );
             this.controls.stats[statGroup] = document.getElementById(
-                statGroup + 'Output'
+                statGroup + 'Control'
             );
         };
 
