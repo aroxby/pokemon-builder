@@ -87,6 +87,7 @@ class App {
     setupHandlers() {
         this.controls.species.onchange = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.onchange = () => this.updatePokemonDataFromLevelControl();
+        this.controls.statExp.hp.onchange = () => this.updatePokemonDataFromHpStatExpControl();
     }
 
     updatePokemonDataFromSpeciesControl() {
@@ -100,6 +101,12 @@ class App {
         const level = Math.round(clamp(rawlevel, 0, 255));
         this.updateLevel(level);
         this.updatePokemonDataFromLevel(this.pokemon.species, level);
+    }
+
+    updatePokemonDataFromHpStatExpControl() {
+        const value = Number(this.controls.statExp.hp.value);
+        // TODO: Clamp
+        this.updatePokemonDataFromHpStatExp(value);
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {
@@ -120,6 +127,13 @@ class App {
 
     updateLevel(level) {
         this.controls.level.value = level;
+    }
+
+    updatePokemonDataFromHpStatExp(statExp) {
+        this.pokemon.statExp.hp = statExp;
+        // Running whole process seems like a waste
+        // Maybe we can do some kind of DAG for dependent fields?
+        this.updateStats(this.pokemon);
     }
 
     updateHpStats(baseStat, iv, statExp, level) {
