@@ -102,9 +102,7 @@ class App {
 
     updatePokemonDataFromHpStatExp(statExp) {
         this.pokemon.statExp.hp = statExp;
-        // Running whole process seems like a waste
-        // Maybe we can do some kind of DAG for dependent fields?
-        this.updateStats(this.pokemon);
+        this.updateFinalStat(StatNames.HP, this.pokemon.calcStat(StatNames.HP));
     }
 
     updateStatGroup(name, baseStat, iv, statExp, finalStat) {
