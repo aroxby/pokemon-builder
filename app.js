@@ -84,6 +84,7 @@ class App {
         const app = this;
         function updatePokemonDataFromStatExpControl() {
             const statExp = clamp(Number(app.controls.statExp[statName].value), 0, 65535);
+            app.controls.statExp[statName].value = statExp;
             app.pokemon.statExp[statName] = statExp;
             app.updateFinalStat(statName, app.pokemon.calcStat(statName));
         }
