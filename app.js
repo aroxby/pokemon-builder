@@ -58,7 +58,9 @@ class App {
     setupHandlers() {
         this.controls.species.onchange = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.onchange = () => this.updatePokemonDataFromLevelControl();
-        this.controls.statExp.hp.onchange = this.createStatExpControlHandler(StatNames.HP);
+        for(const statName of Object.values(StatNames)) {
+            this.controls.statExp[statName].onchange = this.createStatExpControlHandler(statName);
+        }
     }
 
     updatePokemonDataFromSpeciesControl() {
