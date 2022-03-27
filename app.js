@@ -75,8 +75,7 @@ class App {
     }
 
     updatePokemonDataFromHpStatExpControl() {
-        const value = Number(this.controls.statExp.hp.value);
-        // TODO: Clamp
+        const value = clamp(Number(this.controls.statExp.hp.value), 0, 65535);
         this.updatePokemonDataFromHpStatExp(value);
     }
 
