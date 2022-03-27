@@ -13,3 +13,11 @@ function calcStat(base, iv, statexp, level, isHp) {
     }
     return Math.round(val);  // Math.floor wasn't getting the value I wanted
 }
+
+const StatNames = Object.freeze({
+    HP: 'hp',
+    ATTACK: 'attack',
+    DEFENSE: 'defense',
+    SPECIAL: 'special',
+    SPEED: 'speed',
+});

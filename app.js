@@ -9,18 +9,18 @@ class App {
             statExp: {},
             stats: {},
         };
-        for(const statGroup of ['hp', 'attack', 'defense', 'special', 'speed']) {
-            this.controls.baseStats[statGroup] = document.getElementById(
-                statGroup + 'BaseStatControl'
+        for(const statName of Object.values(StatNames)) {
+            this.controls.baseStats[statName] = document.getElementById(
+                statName + 'BaseStatControl'
             );
-            this.controls.ivs[statGroup] = document.getElementById(
-                statGroup + 'IvControl'
+            this.controls.ivs[statName] = document.getElementById(
+                statName + 'IvControl'
             );
-            this.controls.statExp[statGroup] = document.getElementById(
-                statGroup + 'StatExpControl'
+            this.controls.statExp[statName] = document.getElementById(
+                statName + 'StatExpControl'
             );
-            this.controls.stats[statGroup] = document.getElementById(
-                statGroup + 'Control'
+            this.controls.stats[statName] = document.getElementById(
+                statName + 'Control'
             );
         };
 
