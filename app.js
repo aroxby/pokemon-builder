@@ -58,7 +58,7 @@ class App {
     setupHandlers() {
         this.controls.species.onchange = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.onchange = () => this.updatePokemonDataFromLevelControl();
-        this.controls.statExp.hp.onchange = () => this.updatePokemonDataFromHpStatExpControl();
+        this.controls.statExp.hp.onchange = this.createStatExpControlHandler(StatNames.HP);
     }
 
     updatePokemonDataFromSpeciesControl() {
@@ -75,8 +75,19 @@ class App {
     }
 
     updatePokemonDataFromHpStatExpControl() {
-        const value = clamp(Number(this.controls.statExp.hp.value), 0, 65535);
-        this.updatePokemonDataFromHpStatExp(value);
+        const statExp = clamp(Number(this.controls.statExp.hp.value), 0, 65535);
+        this.pokemon.statExp.hp = statExp;
+        this.updateFinalStat(StatNames.HP, this.pokemon.calcStat(StatNames.HP));
+    }
+
+    createStatExpControlHandler(statName) {
+        const app = this;
+        function updatePokemonDataFromStatExpControl() {
+            const statExp = clamp(Number(app.controls.statExp[statName].value), 0, 65535);
+            app.pokemon.statExp[statName] = statExp;
+            app.updateFinalStat(statName, app.pokemon.calcStat(statName));
+        }
+        return updatePokemonDataFromStatExpControl;
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {
@@ -97,11 +108,6 @@ class App {
 
     updateLevel(level) {
         this.controls.level.value = level;
-    }
-
-    updatePokemonDataFromHpStatExp(statExp) {
-        this.pokemon.statExp.hp = statExp;
-        this.updateFinalStat(StatNames.HP, this.pokemon.calcStat(StatNames.HP));
     }
 
     updateStatGroup(name, baseStat, iv, statExp, finalStat) {
