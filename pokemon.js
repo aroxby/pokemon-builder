@@ -26,4 +26,15 @@ class Pokemon {
         this.statExp = statExp || new StatExp();
         this.ivs = ivs || new Ivs();
     }
+
+    calcStat(statName) {
+        const finalStat = calcStat(
+            this.baseStats[statName],
+            this.ivs[statName],
+            this.statExp[statName],
+            this.level,
+            statName == StatNames.HP,
+        );
+        return finalStat;
+    }
 }

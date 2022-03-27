@@ -107,31 +107,6 @@ class App {
         this.updateStats(this.pokemon);
     }
 
-    updateHpStats(baseStat, iv, statExp, level) {
-        const finalStat = calcStat(baseStat, iv, statExp, level, true);
-        this.updateStatGroup('hp', baseStat, iv, statExp, finalStat);
-    }
-
-    updateAttackStats(baseStat, iv, statExp, level) {
-        const finalStat = calcStat(baseStat, iv, statExp, level, false);
-        this.updateStatGroup('attack', baseStat, iv, statExp, finalStat);
-    }
-
-    updateDefenseStats(baseStat, iv, statExp, level) {
-        const finalStat = calcStat(baseStat, iv, statExp, level, false);
-        this.updateStatGroup('defense', baseStat, iv, statExp, finalStat);
-    }
-
-    updateSpecialStats(baseStat, iv, statExp, level) {
-        const finalStat = calcStat(baseStat, iv, statExp, level, false);
-        this.updateStatGroup('special', baseStat, iv, statExp, finalStat);
-    }
-
-    updateSpeedStats(baseStat, iv, statExp, level) {
-        const finalStat = calcStat(baseStat, iv, statExp, level, false);
-        this.updateStatGroup('speed', baseStat, iv, statExp, finalStat);
-    }
-
     updateStatGroup(name, baseStat, iv, statExp, finalStat) {
         this.updateBaseStat(name, baseStat);
         this.updateIv(name, iv);
@@ -160,20 +135,14 @@ class App {
     }
 
     updateStats(pokemon) {
-        this.updateHpStats(
-            pokemon.baseStats.hp, pokemon.ivs.hp, pokemon.statExp.hp, pokemon.level
-        );
-        this.updateAttackStats(
-            pokemon.baseStats.attack, pokemon.ivs.attack, pokemon.statExp.attack, pokemon.level
-        );
-        this.updateDefenseStats(
-            pokemon.baseStats.defense, pokemon.ivs.defense, pokemon.statExp.defense, pokemon.level
-        );
-        this.updateSpecialStats(
-            pokemon.baseStats.special, pokemon.ivs.special, pokemon.statExp.special, pokemon.level
-        );
-        this.updateSpeedStats(
-            pokemon.baseStats.speed, pokemon.ivs.speed, pokemon.statExp.speed, pokemon.level
-        );
+        for(const statName of Object.values(StatNames)) {
+            this.updateStatGroup(
+                statName,
+                pokemon.baseStats[statName],
+                pokemon.ivs[statName],
+                pokemon.statExp[statName],
+                pokemon.calcStat(statName),
+            );
+        }
     }
 };
