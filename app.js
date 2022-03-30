@@ -56,6 +56,7 @@ class App {
     }
 
     setupHandlers() {
+        // TODO: This a handler that updates as you type, unlike onchange?
         this.controls.species.onchange = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.onchange = () => this.updatePokemonDataFromLevelControl();
         for(const statName of Object.values(StatNames)) {
@@ -74,12 +75,6 @@ class App {
         const level = Math.round(clamp(rawlevel, 0, 255));
         this.updateLevel(level);
         this.updatePokemonDataFromLevel(this.pokemon.species, level);
-    }
-
-    updatePokemonDataFromHpStatExpControl() {
-        const statExp = clamp(Number(this.controls.statExp.hp.value), 0, 65535);
-        this.pokemon.statExp.hp = statExp;
-        this.updateFinalStat(StatNames.HP, this.pokemon.calcStat(StatNames.HP));
     }
 
     createStatExpControlHandler(statName) {
