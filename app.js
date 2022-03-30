@@ -62,6 +62,9 @@ class App {
         for(const statName of Object.values(StatNames)) {
             this.controls.statExp[statName].onchange = this.createStatExpControlHandler(statName);
         }
+        for(const statName of Object.values(StatNames)) {
+            this.controls.ivs[statName].onchange = this.createIvControlHandler(statName);
+        }
     }
 
     updatePokemonDataFromSpeciesControl() {
@@ -86,6 +89,17 @@ class App {
             app.updateFinalStat(statName, app.pokemon.calcStat(statName));
         }
         return updatePokemonDataFromStatExpControl;
+    }
+
+    createIvControlHandler(statName) {
+        const app = this;
+        function updatePokemonDataFromIvControl() {
+            const iv = clamp(Number(app.controls.ivs[statName].value), 0, 15);
+            app.controls.ivs[statName].value = iv;
+            app.pokemon.ivs[statName] = iv;
+            app.updateFinalStat(statName, app.pokemon.calcStat(statName));
+        }
+        return updatePokemonDataFromIvControl;
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {
