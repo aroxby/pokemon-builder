@@ -56,15 +56,14 @@ class App {
     }
 
     setupHandlers() {
-        // TODO: This a handler that updates as you type, unlike onchange?
-        this.controls.species.onchange = () => this.updatePokemonDataFromSpeciesControl();
-        this.controls.level.onchange = () => this.updatePokemonDataFromLevelControl();
+        this.controls.species.oninput = () => this.updatePokemonDataFromSpeciesControl();
+        this.controls.level.oninput = () => this.updatePokemonDataFromLevelControl();
         for(const statName of Object.values(StatNames)) {
-            this.controls.statExp[statName].onchange = this.createStatExpControlHandler(statName);
+            this.controls.statExp[statName].oninput = this.createStatExpControlHandler(statName);
         }
         for(const statName of Object.values(StatNames)) {
             if(statName != StatNames.HP) {
-                this.controls.ivs[statName].onchange = this.createIvControlHandler(statName);
+                this.controls.ivs[statName].oninput = this.createIvControlHandler(statName);
             }
         }
     }
