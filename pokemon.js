@@ -37,4 +37,14 @@ class Pokemon {
         );
         return finalStat;
     }
+
+    rebuildHpIv() {
+        const hpIv = (
+            (this.ivs[StatNames.ATTACK] & 1) << 3 |
+            (this.ivs[StatNames.DEFENSE] & 1) << 2 |
+            (this.ivs[StatNames.SPEED] & 1) << 1 |
+            (this.ivs[StatNames.SPECIAL] & 1) << 0
+        );
+        this.ivs[StatNames.HP] = hpIv;
+    }
 }

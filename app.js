@@ -63,7 +63,9 @@ class App {
             this.controls.statExp[statName].onchange = this.createStatExpControlHandler(statName);
         }
         for(const statName of Object.values(StatNames)) {
-            this.controls.ivs[statName].onchange = this.createIvControlHandler(statName);
+            if(statName != StatNames.HP) {
+                this.controls.ivs[statName].onchange = this.createIvControlHandler(statName);
+            }
         }
     }
 
@@ -97,6 +99,8 @@ class App {
             const iv = clamp(Number(app.controls.ivs[statName].value), 0, 15);
             app.controls.ivs[statName].value = iv;
             app.pokemon.ivs[statName] = iv;
+            app.pokemon.rebuildHpIv();
+            app.controls.ivs[StatNames.HP].value = app.pokemon.ivs[StatNames.HP];
             app.updateFinalStat(statName, app.pokemon.calcStat(statName));
         }
         return updatePokemonDataFromIvControl;
