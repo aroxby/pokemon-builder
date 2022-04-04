@@ -23,7 +23,7 @@ class App {
             this.controls.stats[statName] = document.getElementById(
                 statName + 'Control'
             );
-        };
+        }
 
         const allMoveControls = document.getElementsByName('moveControl');
         const allPpControls = document.getElementsByName('ppControl');
@@ -35,6 +35,7 @@ class App {
             });
         }
 
+        // PokemonIds really only exists for this one line
         const defaultSpecies = PokemonIds.BULBASAUR;
         const defaultLevel = 1;
         this.pokemon = new Pokemon(

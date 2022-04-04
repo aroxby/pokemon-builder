@@ -26,6 +26,7 @@ class Pokemon {
         this.statExp = statExp || new StatExp();
         this.ivs = ivs || new Ivs();
         this.moves = [
+            // MoveIds really only exists for this one line
             MoveIds.NONE, MoveIds.NONE, MoveIds.NONE, MoveIds.NONE,
         ];
     }
