@@ -62,6 +62,7 @@ class App {
 
     fillMovesEntries(names) {
         for(const controlSet of this.controls.moves) {
+            // TODO: This control should be sorted alphabetically
             for(const moveIndex in names) {
                 const option = document.createElement("option");
                 option.value = moveIndex;
