@@ -25,6 +25,9 @@ class Pokemon {
         this.baseStats = baseStats;
         this.statExp = statExp || new StatExp();
         this.ivs = ivs || new Ivs();
+        this.moves = [
+            MoveIds.NONE, MoveIds.NONE, MoveIds.NONE, MoveIds.NONE,
+        ];
     }
 
     calcStat(statName) {
@@ -46,5 +49,9 @@ class Pokemon {
             (this.ivs[StatNames.SPECIAL] & 1) << 0
         );
         this.ivs[StatNames.HP] = hpIv;
+    }
+
+    getPp(moveIndex) {
+        return getMovePps()[this.moves[moveIndex]];
     }
 }

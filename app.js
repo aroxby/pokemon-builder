@@ -8,6 +8,7 @@ class App {
             ivs: {},
             statExp: {},
             stats: {},
+            moves: [],
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -24,12 +25,23 @@ class App {
             );
         };
 
+        const allMoveControls = document.getElementsByName('moveControl');
+        const allPpControls = document.getElementsByName('ppControl');
+        // For...in loops over this will return attributes as well as indices
+        for(let controlIndex = 0; controlIndex < allMoveControls.length; controlIndex++) {
+            this.controls.moves.push({
+                move: allMoveControls[controlIndex],
+                pp: allPpControls[controlIndex],
+            });
+        }
+
         const defaultSpecies = PokemonIds.BULBASAUR;
         const defaultLevel = 1;
         this.pokemon = new Pokemon(
             defaultSpecies, defaultLevel, getPokemonBaseStats()[defaultSpecies]
         );
 
+        this.fillMovesEntries(getMoveNames());
         this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
         this.fillDefaultSpecies();
         this.fillDefaultLevel();
@@ -47,6 +59,19 @@ class App {
         }
     }
 
+    fillMovesEntries(names) {
+        for(const controlSet of this.controls.moves) {
+            for(const moveIndex in names) {
+                const option = document.createElement("option");
+                option.value = moveIndex;
+                option.innerHTML = names[moveIndex];
+                controlSet.move.appendChild(option);
+            }
+            controlSet.move.value = MoveIds.NONE;
+            controlSet.pp.value = getMovePps()[controlSet.move.value];
+        }
+    }
+
     fillDefaultSpecies() {
         this.controls.species.value = this.pokemon.species;
     }
@@ -58,6 +83,7 @@ class App {
     setupHandlers() {
         this.controls.species.oninput = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.oninput = () => this.updatePokemonDataFromLevelControl();
+        // TODO: Use less handler generators
         for(const statName of Object.values(StatNames)) {
             this.controls.statExp[statName].oninput = this.createStatExpControlHandler(statName);
         }
@@ -65,6 +91,9 @@ class App {
             if(statName != StatNames.HP) {
                 this.controls.ivs[statName].oninput = this.createIvControlHandler(statName);
             }
+        }
+        for(const controlIndex in this.controls.moves) {
+            this.controls.moves[controlIndex].move.oninput = this.createMoveControlHandler(controlIndex);
         }
     }
 
@@ -103,6 +132,16 @@ class App {
             app.updateFinalStat(statName, app.pokemon.calcStat(statName));
         }
         return updatePokemonDataFromIvControl;
+    }
+
+    createMoveControlHandler(controlIndex) {
+        const app = this;
+        function updatePokemonDataFromMoveControl() {
+            const move = Number(app.controls.moves[controlIndex].move.value);
+            app.pokemon.moves[controlIndex] = move;
+            app.controls.moves[controlIndex].pp.value = app.pokemon.getPp(controlIndex);
+        }
+        return updatePokemonDataFromMoveControl;
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {

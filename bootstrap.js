@@ -35,6 +35,9 @@ const requiredFiles = [
     'pokemon.js',
     'pokemonIds.js',
     'stats.js',
+    'moveIds.js',
+    'moveNames.js',
+    'movePps.js',
 ];
 
 requireFiles(requiredFiles, () => new App());
