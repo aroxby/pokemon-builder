@@ -85,17 +85,16 @@ class App {
     setupHandlers() {
         this.controls.species.oninput = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.oninput = () => this.updatePokemonDataFromLevelControl();
-        // TODO: Use less handler generators
         for(const statName of Object.values(StatNames)) {
-            this.controls.statExp[statName].oninput = this.createStatExpControlHandler(statName);
+            this.controls.statExp[statName].oninput = () => this.updatePokemonDataFromStatExpControl(statName);
         }
         for(const statName of Object.values(StatNames)) {
             if(statName != StatNames.HP) {
-                this.controls.ivs[statName].oninput = this.createIvControlHandler(statName);
+                this.controls.ivs[statName].oninput = () => this.updatePokemonDataFromIvControl(statName);
             }
         }
         for(const controlIndex in this.controls.moves) {
-            this.controls.moves[controlIndex].move.oninput = this.createMoveControlHandler(controlIndex);
+            this.controls.moves[controlIndex].move.oninput = () => this.updatePokemonDataFromMoveControl(controlIndex);
         }
     }
 
@@ -112,38 +111,26 @@ class App {
         this.updatePokemonDataFromLevel(this.pokemon.species, level);
     }
 
-    createStatExpControlHandler(statName) {
-        const app = this;
-        function updatePokemonDataFromStatExpControl() {
-            const statExp = clamp(Number(app.controls.statExp[statName].value), 0, 65535);
-            app.controls.statExp[statName].value = statExp;
-            app.pokemon.statExp[statName] = statExp;
-            app.updateFinalStat(statName, app.pokemon.calcStat(statName));
-        }
-        return updatePokemonDataFromStatExpControl;
+    updatePokemonDataFromStatExpControl(statName) {
+        const statExp = clamp(Number(this.controls.statExp[statName].value), 0, 65535);
+        this.controls.statExp[statName].value = statExp;
+        this.pokemon.statExp[statName] = statExp;
+        this.updateFinalStat(statName, this.pokemon.calcStat(statName));
     }
 
-    createIvControlHandler(statName) {
-        const app = this;
-        function updatePokemonDataFromIvControl() {
-            const iv = clamp(Number(app.controls.ivs[statName].value), 0, 15);
-            app.controls.ivs[statName].value = iv;
-            app.pokemon.ivs[statName] = iv;
-            app.pokemon.rebuildHpIv();
-            app.controls.ivs[StatNames.HP].value = app.pokemon.ivs[StatNames.HP];
-            app.updateFinalStat(statName, app.pokemon.calcStat(statName));
-        }
-        return updatePokemonDataFromIvControl;
+    updatePokemonDataFromIvControl(statName) {
+        const iv = clamp(Number(this.controls.ivs[statName].value), 0, 15);
+        this.controls.ivs[statName].value = iv;
+        this.pokemon.ivs[statName] = iv;
+        this.pokemon.rebuildHpIv();
+        this.controls.ivs[StatNames.HP].value = this.pokemon.ivs[StatNames.HP];
+        this.updateFinalStat(statName, this.pokemon.calcStat(statName));
     }
 
-    createMoveControlHandler(controlIndex) {
-        const app = this;
-        function updatePokemonDataFromMoveControl() {
-            const move = Number(app.controls.moves[controlIndex].move.value);
-            app.pokemon.moves[controlIndex] = move;
-            app.controls.moves[controlIndex].pp.value = app.pokemon.getPp(controlIndex);
-        }
-        return updatePokemonDataFromMoveControl;
+    updatePokemonDataFromMoveControl(controlIndex) {
+        const move = Number(this.controls.moves[controlIndex].move.value);
+        this.pokemon.moves[controlIndex] = move;
+        this.controls.moves[controlIndex].pp.value = this.pokemon.getPp(controlIndex);
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {
