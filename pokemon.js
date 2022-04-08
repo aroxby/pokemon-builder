@@ -29,6 +29,7 @@ class Pokemon {
             // MoveIds really only exists for this one line
             MoveIds.NONE, MoveIds.NONE, MoveIds.NONE, MoveIds.NONE,
         ];
+        this.types = [TypeIds.NORMAL, TypeIds.NORMAL];
     }
 
     calcStat(statName) {

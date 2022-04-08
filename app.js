@@ -9,6 +9,7 @@ class App {
             statExp: {},
             stats: {},
             moves: [],
+            types: [],
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -35,6 +36,11 @@ class App {
             });
         }
 
+        const allTypeControls = document.getElementsByName('typeControl');
+        for(let controlIndex = 0; controlIndex < allTypeControls.length; controlIndex++) {
+            this.controls.types.push(allTypeControls[controlIndex]);
+        }
+
         // PokemonIds really only exists for this one line
         const defaultSpecies = PokemonIds.BULBASAUR;
         const defaultLevel = 1;
@@ -42,8 +48,9 @@ class App {
             defaultSpecies, defaultLevel, getPokemonBaseStats()[defaultSpecies]
         );
 
-        this.fillMovesEntries(getMoveNames());
         this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
+        this.fillMovesEntries(getMoveNames());
+        this.fillTypeEntries(TypeNames);
         this.fillDefaultSpecies();
         this.fillDefaultLevel();
         this.setupHandlers();
@@ -62,7 +69,6 @@ class App {
 
     fillMovesEntries(names) {
         for(const controlSet of this.controls.moves) {
-            // TODO: This control should be sorted alphabetically
             for(const name in names) {
                 const option = document.createElement("option");
                 option.value = names[name];
@@ -71,6 +77,18 @@ class App {
             }
             controlSet.move.value = MoveIds.NONE;
             controlSet.pp.value = getMovePps()[controlSet.move.value];
+        }
+    }
+
+    fillTypeEntries(types) {
+        for(const typeControl of this.controls.types) {
+            for(const name in types) {
+                const option = document.createElement("option");
+                option.value = types[name];
+                option.innerHTML = name;
+                typeControl.appendChild(option);
+            }
+            typeControl.value = TypeIds.NORMAL;
         }
     }
 
@@ -133,10 +151,17 @@ class App {
         this.controls.moves[controlIndex].pp.value = this.pokemon.getPp(controlIndex);
     }
 
+    updatePokemonDataFromTypeControl(controlIndex) {
+        const type = Number(this.controls.types[controlIndex].value);
+        this.pokemon.types[controlIndex] = type;
+    }
+
     updatePokemonDataFromSpecies(species, pokedexNumber) {
         this.pokemon.species = species;
+        this.pokemon.types = getPokemonTypes()[species];
         this.pokemon.baseStats = getPokemonBaseStats()[species];
         this.updatePokedexNumber(pokedexNumber);
+        this.updateTypes(this.pokemon.types);
         this.updateStats(this.pokemon);
     }
 
@@ -190,5 +215,10 @@ class App {
                 pokemon.calcStat(statName),
             );
         }
+    }
+
+    updateTypes(types) {
+        this.controls.types[0].value = types[0];
+        this.controls.types[1].value = types[1];
     }
 };

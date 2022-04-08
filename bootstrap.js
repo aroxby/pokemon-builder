@@ -31,13 +31,16 @@ const requiredFiles = [
     'app.js',
     'basestats.js',
     'dex.js',
-    'names.js',
-    'pokemon.js',
-    'pokemonIds.js',
-    'stats.js',
     'moveIds.js',
     'moveNames.js',
     'movePps.js',
+    'names.js',
+    'pokemon.js',
+    'pokemonIds.js',
+    'pokemonTypes.js',
+    'stats.js',
+    'typeIds.js',
+    'typeNames.js',
 ];
 
 requireFiles(requiredFiles, () => new App());
