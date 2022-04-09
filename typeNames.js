@@ -1,0 +1,18 @@
+const TypeNames = Object.freeze({
+    'Bird': TypeIds.BIRD,
+    'Bug': TypeIds.BUG,
+    'Dragon': TypeIds.DRAGON,
+    'Electric': TypeIds.ELECTRIC,
+    'Fighting': TypeIds.FIGHTING,
+    'Fire': TypeIds.FIRE,
+    'Flying': TypeIds.FLYING,
+    'Ghost': TypeIds.GHOST,
+    'Grass': TypeIds.GRASS,
+    'Ground': TypeIds.GROUND,
+    'Ice': TypeIds.ICE,
+    'Normal': TypeIds.NORMAL,
+    'Poison': TypeIds.POISON,
+    'Psychic': TypeIds.PSYCHIC,
+    'Rock': TypeIds.ROCK,
+    'Water': TypeIds.WATER,
+});
