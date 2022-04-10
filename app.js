@@ -10,6 +10,7 @@ class App {
             stats: {},
             moves: [],
             types: [],
+            exp: document.getElementById('expControl'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -53,6 +54,7 @@ class App {
         this.fillTypeEntries(TypeNames);
         this.fillDefaultSpecies();
         this.fillDefaultLevel();
+        this.fillDefaultExp();
         this.setupHandlers();
         // this is used instead of updateStats so the pokedex number gets set
         this.updatePokemonDataFromSpeciesControl();
@@ -98,6 +100,10 @@ class App {
 
     fillDefaultLevel() {
         this.updateLevel(this.pokemon.level);
+    }
+
+    fillDefaultExp() {
+        this.controls.exp.value = 0;
     }
 
     setupHandlers() {
@@ -163,11 +169,17 @@ class App {
         this.updatePokedexNumber(pokedexNumber);
         this.updateTypes(this.pokemon.types);
         this.updateStats(this.pokemon);
+        this.updateExp(this.pokemon.calcExp());
     }
 
     updatePokemonDataFromLevel(species, level) {
         this.pokemon.level = level;
+        this.updateExp(this.pokemon.calcExp());
         this.updateStats(this.pokemon);
+    }
+
+    updateExp(exp) {
+        this.controls.exp.value = exp;
     }
 
     updatePokedexNumber(number) {

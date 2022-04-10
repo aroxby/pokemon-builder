@@ -43,6 +43,13 @@ class Pokemon {
         return finalStat;
     }
 
+    calcExp() {
+        const rate = getPokemonGrowthRate(this.species);
+        const formula = growthFormulas(rate);
+        const exp = formula(this.level);
+        return Math.max(Math.floor(exp), 0);
+    }
+
     rebuildHpIv() {
         const hpIv = (
             (this.ivs[StatNames.ATTACK] & 1) << 3 |

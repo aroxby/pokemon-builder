@@ -1,5 +1,6 @@
 .app {
     background-color: #cccccc;
+    width: 750px;
 }
 
 .control {
@@ -20,4 +21,8 @@
 
 input {
     width: 55px;
+}
+
+#expControl {
+    width: 70px;
 }
