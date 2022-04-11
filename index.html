@@ -10,58 +10,55 @@
     <div class="app">
         <fieldset>
             <legend>Basic</legend>
-            <div class="control">
-                <div class="label">
-                    Species
-                </div>
-                <div class="input">
-                    <select id="speciesControl"></select>
-                </div>
-                <div class="spacer">
-                    &nbsp;
-                </div>
-                <div class="label">
-                    No.
-                </div>
-                <div class="label" id="pokedexNumber">
-                </div>
-                <div class="spacer">
-                    &nbsp;
-                </div>
-                <div class="groupbox">
-                    <div class="control">
-                        <div class="label">
-                            Type 1
-                        </div>
-                        <div class="control">
-                            <select name="typeControl"></select>
-                        </div>
+            <div class="controlColumn">
+                <div class="control">
+                    <div class="label">
+                        Species
                     </div>
-                    <div class="control" style="display:block">
-                        <div class="label">
-                            Type 2
-                        </div>
-                        <div class="control">
-                            <select name="typeControl"></select>
-                        </div>
+                    <div class="input">
+                        <select id="speciesControl"></select>
+                    </div>
+                    <div class="spacer">
+                        &nbsp;
+                    </div>
+                    <div class="label">
+                        No.
+                    </div>
+                    <div class="label" id="pokedexNumber">
+                    </div>
+                    <br>
+                    <div class="label">
+                        Level
+                    </div>
+                    <div class="input">
+                        <input id="levelControl" type="number" min="0" max="255" />
+                    </div>
+                    <div class="spacer">
+                        &nbsp;
+                    </div>
+                    <div class="label">
+                        XP
+                    </div>
+                    <div class="input">
+                        <input id="expControl" type="number" min="0" />
                     </div>
                 </div>
             </div>
-            <div class="control">
-                <div class="label">
-                    Level
-                </div>
-                <div class="input">
-                    <input id="levelControl" type="number" min="0" max="255" />
-                </div>
-                <div class="spacer">
-                    &nbsp;
-                </div>
-                <div class="label">
-                    XP
-                </div>
-                <div class="input">
-                    <input id="expControl" type="number" min="0" />
+            <div class="controlColumn">
+                <div class="control">
+                    <div class="label">
+                        Type 1
+                    </div>
+                    <div class="control">
+                        <select name="typeControl"></select>
+                    </div>
+                    <br>
+                    <div class="label">
+                        Type 2
+                    </div>
+                    <div class="control">
+                        <select name="typeControl"></select>
+                    </div>
                 </div>
             </div>
         </fieldset>

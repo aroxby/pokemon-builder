@@ -11,8 +11,10 @@
     display: inline;
 }
 
-.groupbox {
-    position: fixed;
+.controlColumn {
+    display: inline-block;
+    line-height: 150%;
+    width: 33%;
 }
 
 #pokedexNumber {
