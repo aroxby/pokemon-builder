@@ -11,6 +11,8 @@ class App {
             moves: [],
             types: [],
             exp: document.getElementById('expControl'),
+            otId: document.getElementById('OtIdControl'),
+            otName: document.getElementById('OtNameControl'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -41,6 +43,11 @@ class App {
         for(let controlIndex = 0; controlIndex < allTypeControls.length; controlIndex++) {
             this.controls.types.push(allTypeControls[controlIndex]);
         }
+
+        const defaultOtId = 31337;
+        const defaultOtName = 'Trainer';
+        this.controls.otId.value = defaultOtId;
+        this.controls.otName.value = defaultOtName;
 
         // PokemonIds really only exists for this one line
         const defaultSpecies = PokemonIds.BULBASAUR;
