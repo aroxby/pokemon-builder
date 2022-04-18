@@ -27,3 +27,11 @@ input {
 #expControl {
     width: 70px;
 }
+
+.nickname {
+    width: 90px;
+}
+
+.trainer {
+    width: 65px;
+}

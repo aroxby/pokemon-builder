@@ -13,6 +13,7 @@ class App {
             exp: document.getElementById('expControl'),
             otId: document.getElementById('OtIdControl'),
             otName: document.getElementById('OtNameControl'),
+            nickname: document.getElementById('nickControl'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -63,7 +64,7 @@ class App {
         this.fillDefaultLevel();
         this.fillDefaultExp();
         this.setupHandlers();
-        // this is used instead of updateStats so the pokedex number gets set
+        // this is used to cascade updates to other controls
         this.updatePokemonDataFromSpeciesControl();
     }
 
@@ -133,6 +134,11 @@ class App {
         const species = Number(this.controls.species.value);
         const pokedexNumber = this.controls.species.selectedIndex + 1;
         this.updatePokemonDataFromSpecies(species, pokedexNumber);
+        this.updateNicknameFromSpecies(species);
+    }
+
+    updateNicknameFromSpecies(species) {
+        this.controls.nickname.value = getPokemonNames()[species];
     }
 
     updatePokemonDataFromLevelControl() {
