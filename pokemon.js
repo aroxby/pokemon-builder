@@ -6,6 +6,18 @@ class Ivs {
         this.special = special;
         this.speed = speed;
     }
+
+    serialize() {
+        const serializer = new Serializer();
+
+        // These bit wise operators really bug me.
+        // The point of creating these data arrays is so that I don't have
+        // to think about how to pack the data.
+        serializer.addInt(this.attack << 4 | this.defense, 1);
+        serializer.addInt(this.speed << 4 | this.special, 1);
+
+        return serializer.data;
+    }
 }
 
 class StatExp {
@@ -65,5 +77,44 @@ class Pokemon {
 
     getPp(moveIndex) {
         return getMovePps()[this.moves[moveIndex]];
+    }
+
+    serialize() {
+        const hp = this.calcStat(StatNames.HP);
+
+        const serializer = new Serializer();
+        serializer.addInt(this.species, 1);
+        serializer.addInt(hp, 2);
+        serializer.addInt(this.level, 1);
+        serializer.addInt(0, 1);  // Status condition
+        serializer.addInt(this.types[0], 1);
+        serializer.addInt(this.types[1], 1);
+        serializer.addInt(0, 1);  // Held item
+        serializer.addInt(this.moves[0], 1);
+        serializer.addInt(this.moves[1], 1);
+        serializer.addInt(this.moves[2], 1);
+        serializer.addInt(this.moves[3], 1);
+        serializer.addInt(this.otId, 2);
+        serializer.addInt(this.exp, 3);
+        serializer.addInt(this.statExp.hp, 2);
+        serializer.addInt(this.statExp.attack, 2);
+        serializer.addInt(this.statExp.defense, 2);
+        serializer.addInt(this.statExp.speed, 2);
+        serializer.addInt(this.statExp.special, 2);
+        serializer.addData(this.ivs.serialize(), 2);
+        serializer.addInt(getMovePps()[this.moves[0]], 1);
+        serializer.addInt(getMovePps()[this.moves[1]], 1);
+        serializer.addInt(getMovePps()[this.moves[2]], 1);
+        serializer.addInt(getMovePps()[this.moves[3]], 1);
+        serializer.addInt(this.level, 1);
+        serializer.addInt(hp, 2);
+        serializer.addInt(this.calcStat(StatNames.ATTACK), 2);
+        serializer.addInt(this.calcStat(StatNames.DEFENSE), 2);
+        serializer.addInt(this.calcStat(StatNames.SPEED), 2);
+        serializer.addInt(this.calcStat(StatNames.SPECIAL), 2);
+        // serializer.addString(this.otName, 8);  // FIXME: will need padding
+        // serializer.addString(this.nickname, 11);  // FIXME: will need padding
+
+        return serializer.data;
     }
 }
