@@ -84,6 +84,9 @@ class Pokemon {
         const hp = this.calcStat(StatNames.HP);
 
         const serializer = new Serializer();
+        serializer.addInt(1, 1);  // PKHeX compatibility
+        serializer.addInt(this.species, 1);  // PKHeX compatibility
+        serializer.addInt(0xff, 1);  // PKHeX compatibility
         serializer.addInt(this.species, 1);
         serializer.addInt(hp, 2);
         serializer.addInt(this.level, 1);
@@ -114,6 +117,7 @@ class Pokemon {
         serializer.addInt(this.calcStat(StatNames.SPEED), 2);
         serializer.addInt(this.calcStat(StatNames.SPECIAL), 2);
         serializer.addString(padString(this.otName, 8), 8);  // FIXME: needs game encoding
+        serializer.addInt(0, 3);  // PKHeX compatibility
         serializer.addString(padString(this.nickname, 11), 11);  // FIXME: needs game encoding
 
         return serializer.data;
