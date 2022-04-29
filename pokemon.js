@@ -113,8 +113,8 @@ class Pokemon {
         serializer.addInt(this.calcStat(StatNames.DEFENSE), 2);
         serializer.addInt(this.calcStat(StatNames.SPEED), 2);
         serializer.addInt(this.calcStat(StatNames.SPECIAL), 2);
-        // serializer.addString(this.otName, 8);  // FIXME: will need padding
-        // serializer.addString(this.nickname, 11);  // FIXME: will need padding
+        serializer.addString(padString(this.otName, 8), 8);  // FIXME: needs game encoding
+        serializer.addString(padString(this.nickname, 11), 11);  // FIXME: needs game encoding
 
         return serializer.data;
     }
