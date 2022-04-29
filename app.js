@@ -53,8 +53,12 @@ class App {
         // PokemonIds really only exists for this one line
         const defaultSpecies = PokemonIds.BULBASAUR;
         const defaultLevel = 1;
+        const defaultExp = 0;
+        const defaultNick = getPokemonNames()[defaultSpecies];
         this.pokemon = new Pokemon(
-            defaultSpecies, defaultLevel, getPokemonBaseStats()[defaultSpecies]
+            defaultSpecies, defaultLevel, defaultExp,
+            getPokemonBaseStats()[defaultSpecies],
+            defaultNick, defaultOtId,
         );
 
         this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
@@ -111,23 +115,38 @@ class App {
     }
 
     fillDefaultExp() {
-        this.controls.exp.value = 0;
+        this.controls.exp.value = this.pokemon.exp;
     }
 
     setupHandlers() {
         this.controls.species.oninput = () => this.updatePokemonDataFromSpeciesControl();
         this.controls.level.oninput = () => this.updatePokemonDataFromLevelControl();
+        this.controls.exp.oninput = () => this.updatePokemonExp();
+
         for(const statName of Object.values(StatNames)) {
             this.controls.statExp[statName].oninput = () => this.updatePokemonDataFromStatExpControl(statName);
         }
+
         for(const statName of Object.values(StatNames)) {
             if(statName != StatNames.HP) {
                 this.controls.ivs[statName].oninput = () => this.updatePokemonDataFromIvControl(statName);
             }
         }
+
         for(const controlIndex in this.controls.moves) {
             this.controls.moves[controlIndex].move.oninput = () => this.updatePokemonDataFromMoveControl(controlIndex);
         }
+
+        for(const controlIndex in this.controls.types) {
+            this.controls.types[controlIndex].oninput = () => this.updatePokemonDataFromTypeControl(controlIndex);
+        }
+
+        this.controls.nickname.oninput = () => this.updatePokemonNickname();
+        this.controls.otId.oninput = () => this.updatePokemonOt();
+    }
+
+    updatePokemonExp() {
+        this.pokemon.exp = this.controls.exp.value;
     }
 
     updatePokemonDataFromSpeciesControl() {
@@ -138,7 +157,8 @@ class App {
     }
 
     updateNicknameFromSpecies(species) {
-        this.controls.nickname.value = getPokemonNames()[species];
+        const nickname = getPokemonNames()[species];
+        this.pokemon.nickname = this.controls.nickname.value = nickname;
     }
 
     updatePokemonDataFromLevelControl() {
@@ -173,6 +193,14 @@ class App {
     updatePokemonDataFromTypeControl(controlIndex) {
         const type = Number(this.controls.types[controlIndex].value);
         this.pokemon.types[controlIndex] = type;
+    }
+
+    updatePokemonNickname() {
+        this.pokemon.nickname = this.controls.nickname.value;
+    }
+
+    updatePokemonOt() {
+        this.pokemon.otId = Number(this.controls.otId.value);
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {

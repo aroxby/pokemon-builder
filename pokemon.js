@@ -19,17 +19,20 @@ class StatExp {
 }
 
 class Pokemon {
-    constructor(species, level, baseStats, statExp = null, ivs = null) {
+    constructor(species, level, exp, baseStats, nickname, otId) {
         this.species = species;
         this.level = level;
+        this.exp = exp;
         this.baseStats = baseStats;
-        this.statExp = statExp || new StatExp();
-        this.ivs = ivs || new Ivs();
+        this.statExp = new StatExp();
+        this.ivs = new Ivs();
         this.moves = [
             // MoveIds really only exists for this one line
             MoveIds.NONE, MoveIds.NONE, MoveIds.NONE, MoveIds.NONE,
         ];
         this.types = [TypeIds.NORMAL, TypeIds.NORMAL];
+        this.nickname = nickname;
+        this.otId = otId;
     }
 
     calcStat(statName) {
