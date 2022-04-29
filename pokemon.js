@@ -31,7 +31,7 @@ class StatExp {
 }
 
 class Pokemon {
-    constructor(species, level, exp, baseStats, nickname, otId) {
+    constructor(species, level, exp, baseStats, nickname, otId, otName) {
         this.species = species;
         this.level = level;
         this.exp = exp;
@@ -45,6 +45,7 @@ class Pokemon {
         this.types = [TypeIds.NORMAL, TypeIds.NORMAL];
         this.nickname = nickname;
         this.otId = otId;
+        this.otName = otName;
     }
 
     calcStat(statName) {

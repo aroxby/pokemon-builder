@@ -60,7 +60,7 @@ class App {
         this.pokemon = new Pokemon(
             defaultSpecies, defaultLevel, defaultExp,
             getPokemonBaseStats()[defaultSpecies],
-            defaultNick, defaultOtId,
+            defaultNick, defaultOtId, defaultOtName,
         );
 
         this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
