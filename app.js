@@ -14,6 +14,8 @@ class App {
             otId: document.getElementById('OtIdControl'),
             otName: document.getElementById('OtNameControl'),
             nickname: document.getElementById('nickControl'),
+            hexRefesh: document.getElementById('hexRefreshControl'),
+            hexData: document.getElementById('hexDataControl'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -143,6 +145,8 @@ class App {
 
         this.controls.nickname.oninput = () => this.updatePokemonNickname();
         this.controls.otId.oninput = () => this.updatePokemonOt();
+
+        this.controls.hexRefesh.onclick = () => this.controls.hexData.value = hexDump(this.pokemon.serialize());
     }
 
     updatePokemonExp() {

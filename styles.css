@@ -28,6 +28,14 @@ input {
     width: 70px;
 }
 
+#hexDataControl {
+    width: 100%;
+}
+
+#hexRefreshControl {
+    width: 70px;
+}
+
 .nickname {
     width: 90px;
 }
