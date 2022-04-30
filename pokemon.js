@@ -116,9 +116,9 @@ class Pokemon {
         serializer.addInt(this.calcStat(StatNames.DEFENSE), 2);
         serializer.addInt(this.calcStat(StatNames.SPEED), 2);
         serializer.addInt(this.calcStat(StatNames.SPECIAL), 2);
-        serializer.addString(padString(this.otName, 8), 8);  // FIXME: needs game encoding
+        serializer.addString(gameEncodeString(padString(this.otName, 8)), 8);
         serializer.addInt(0, 3);  // PKHeX compatibility
-        serializer.addString(padString(this.nickname, 11), 11);  // FIXME: needs game encoding
+        serializer.addString(gameEncodeString(padString(this.nickname, 11)), 11);
 
         return serializer.data;
     }
