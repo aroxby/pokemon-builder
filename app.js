@@ -16,6 +16,7 @@ class App {
             nickname: document.getElementById('nickControl'),
             hexRefesh: document.getElementById('hexRefreshControl'),
             hexData: document.getElementById('hexDataControl'),
+            exportButton: document.getElementById('exportControl'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -147,6 +148,7 @@ class App {
         this.controls.otId.oninput = () => this.updatePokemonOt();
 
         this.controls.hexRefesh.onclick = () => this.controls.hexData.value = hexDump(this.pokemon.serialize());
+        this.controls.exportButton.onclick = () => this.createPokemonDownload();
     }
 
     updatePokemonExp() {
@@ -277,5 +279,12 @@ class App {
     updateTypes(types) {
         this.controls.types[0].value = types[0];
         this.controls.types[1].value = types[1];
+    }
+
+    createPokemonDownload() {
+        const suffix = '.pk1';
+        const filename = this.pokemon.nickname + suffix;
+        const data = this.pokemon.serialize();
+        pushDownload(filename, data);
     }
 };

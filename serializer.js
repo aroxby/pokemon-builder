@@ -33,3 +33,13 @@ function hexDump(data) {
     }
     return str.slice(0, -1);
 }
+
+function pushDownload(filename, data) {
+    const encodedData = btoa(String.fromCharCode(...data));
+
+    const link = document.createElement('a');
+    link.setAttribute('href', 'data:application/octet-stream;base64,' + encodedData);
+    link.setAttribute('download', filename);
+
+    link.click();
+}
