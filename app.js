@@ -145,7 +145,8 @@ class App {
         }
 
         this.controls.nickname.oninput = () => this.updatePokemonNickname();
-        this.controls.otId.oninput = () => this.updatePokemonOt();
+        this.controls.otId.oninput = () => this.updatePokemonOtId();
+        this.controls.otName.oninput = () => this.updatePokemonOtName();
 
         this.controls.hexRefesh.onclick = () => this.controls.hexData.value = hexDump(this.pokemon.serialize());
         this.controls.exportButton.onclick = () => this.createPokemonDownload();
@@ -205,8 +206,12 @@ class App {
         this.pokemon.nickname = this.controls.nickname.value;
     }
 
-    updatePokemonOt() {
+    updatePokemonOtId() {
         this.pokemon.otId = Number(this.controls.otId.value);
+    }
+
+    updatePokemonOtName() {
+        this.pokemon.otName = this.controls.otName.value;
     }
 
     updatePokemonDataFromSpecies(species, pokedexNumber) {
