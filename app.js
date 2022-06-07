@@ -148,7 +148,7 @@ class App {
         this.controls.otId.oninput = () => this.updatePokemonOtId();
         this.controls.otName.oninput = () => this.updatePokemonOtName();
 
-        this.controls.hexRefesh.onclick = () => this.controls.hexData.value = hexDump(this.pokemon.serialize());
+        this.controls.hexRefesh.onclick = () => this.hexDumpPokemon();
         this.controls.exportButton.onclick = () => this.createPokemonDownload();
     }
 
@@ -284,6 +284,10 @@ class App {
     updateTypes(types) {
         this.controls.types[0].value = types[0];
         this.controls.types[1].value = types[1];
+    }
+
+    hexDumpPokemon() {
+        this.controls.hexData.value = hexDump(this.pokemon.serialize());
     }
 
     createPokemonDownload() {
