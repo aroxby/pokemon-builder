@@ -41,6 +41,10 @@ input[type=file] {
     height: 3.5em;
 }
 
+#importControl {
+    display: none;
+}
+
 .nickname {
     width: 90px;
 }
