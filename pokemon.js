@@ -40,7 +40,7 @@ class StatExp {
 }
 
 class Pokemon {
-    constructor(species, level, exp, baseStats, nickname, otId, otName) {
+    constructor(species, level, exp, baseStats, types, nickname, otId, otName) {
         this.species = species;
         this.level = level;
         this.exp = exp;
@@ -51,7 +51,7 @@ class Pokemon {
             // MoveIds really only exists for this one line
             MoveIds.NONE, MoveIds.NONE, MoveIds.NONE, MoveIds.NONE,
         ];
-        this.types = [TypeIds.NORMAL, TypeIds.NORMAL];
+        this.types = types;
         this.nickname = nickname;
         this.otId = otId;
         this.otName = otName;

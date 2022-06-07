@@ -49,31 +49,29 @@ class App {
             this.controls.types.push(allTypeControls[controlIndex]);
         }
 
-        const defaultOtId = 31337;
-        const defaultOtName = 'Trainer';
-        this.controls.otId.value = defaultOtId;
-        this.controls.otName.value = defaultOtName;
-
-        // PokemonIds really only exists for this one line
-        const defaultSpecies = PokemonIds.BULBASAUR;
-        const defaultLevel = 1;
-        const defaultExp = 0;
-        const defaultNick = getPokemonNames()[defaultSpecies];
-        this.pokemon = new Pokemon(
-            defaultSpecies, defaultLevel, defaultExp,
-            getPokemonBaseStats()[defaultSpecies],
-            defaultNick, defaultOtId, defaultOtName,
-        );
-
         this.fillSpeciesEntry(getPokedexOrder(), getPokemonNames());
         this.fillMovesEntries(getMoveNames());
         this.fillTypeEntries(TypeNames);
-        this.fillDefaultSpecies();
-        this.fillDefaultLevel();
-        this.fillDefaultExp();
+
+        this.buildDefaultPokemon();
+        this.reloadEntirePokemon();
+
         this.setupHandlers();
-        // this is used to cascade updates to other controls
-        this.updatePokemonDataFromSpeciesControl();
+    }
+
+    buildDefaultPokemon() {
+        // PokemonIds really only exists for this one line
+        const species = PokemonIds.BULBASAUR;
+        const level = 1;
+        const exp = 0;
+        const baseStats = getPokemonBaseStats()[species];
+        const types = getPokemonTypes()[species];
+        const nickname = getPokemonNames()[species];
+        const otId = 31337;
+        const otName = 'Trainer';
+        this.pokemon = new Pokemon(
+            species, level, exp, baseStats, types, nickname, otId, otName
+        );
     }
 
     fillSpeciesEntry(order, names) {
@@ -110,16 +108,50 @@ class App {
         }
     }
 
-    fillDefaultSpecies() {
+    reloadEntirePokemon() {
+        this.reloadPokemonSpecies();
+        // Cheating the reverse lookup here
+        const pokedexNumber = this.controls.species.selectedIndex + 1;
+        this.updatePokedexNumber(pokedexNumber);
+        this.reloadPokemonLevel();
+        this.reloadPokemonExp();
+        this.reloadPokemonMoves();
+        this.reloadPokemonOt();
+        this.reloadPokemonNickname();
+        this.reloadPokemonTypes();
+        this.reloadPokemonStats();
+    }
+
+    reloadPokemonSpecies() {
         this.controls.species.value = this.pokemon.species;
     }
 
-    fillDefaultLevel() {
+    reloadPokemonLevel() {
         this.updateLevel(this.pokemon.level);
     }
 
-    fillDefaultExp() {
+    reloadPokemonExp() {
         this.controls.exp.value = this.pokemon.exp;
+    }
+
+    reloadPokemonMoves() {
+        this.controls.moves[0].move.value = this.pokemon.moves[0];
+        this.controls.moves[1].move.value = this.pokemon.moves[1];
+        this.controls.moves[2].move.value = this.pokemon.moves[2];
+        this.controls.moves[3].move.value = this.pokemon.moves[3];
+        this.controls.moves[0].pp.value = this.pokemon.getPp(0);
+        this.controls.moves[1].pp.value = this.pokemon.getPp(1);
+        this.controls.moves[2].pp.value = this.pokemon.getPp(2);
+        this.controls.moves[3].pp.value = this.pokemon.getPp(3);
+    }
+
+    reloadPokemonOt() {
+        this.controls.otId.value = this.pokemon.otId;
+        this.controls.otName.value = this.pokemon.otName;
+    }
+
+    reloadPokemonNickname() {
+        this.controls.nickname.value = this.pokemon.nickname;
     }
 
     setupHandlers() {
@@ -221,15 +253,15 @@ class App {
         this.pokemon.types = getPokemonTypes()[species];
         this.pokemon.baseStats = getPokemonBaseStats()[species];
         this.updatePokedexNumber(pokedexNumber);
-        this.updateTypes(this.pokemon.types);
-        this.updateStats(this.pokemon);
+        this.reloadPokemonTypes();
+        this.reloadPokemonStats();
         this.updateExp(this.pokemon.calcExp());
     }
 
     updatePokemonDataFromLevel(species, level) {
         this.pokemon.level = level;
         this.updateExp(this.pokemon.calcExp());
-        this.updateStats(this.pokemon);
+        this.reloadPokemonStats();
     }
 
     updateExp(exp) {
@@ -271,21 +303,21 @@ class App {
         input.value = stat;
     }
 
-    updateStats(pokemon) {
+    reloadPokemonStats() {
         for(const statName of Object.values(StatNames)) {
             this.updateStatGroup(
                 statName,
-                pokemon.baseStats[statName],
-                pokemon.ivs[statName],
-                pokemon.statExp[statName],
-                pokemon.calcStat(statName),
+                this.pokemon.baseStats[statName],
+                this.pokemon.ivs[statName],
+                this.pokemon.statExp[statName],
+                this.pokemon.calcStat(statName),
             );
         }
     }
 
-    updateTypes(types) {
-        this.controls.types[0].value = types[0];
-        this.controls.types[1].value = types[1];
+    reloadPokemonTypes() {
+        this.controls.types[0].value = this.pokemon.types[0];
+        this.controls.types[1].value = this.pokemon.types[1];
     }
 
     hexDumpPokemon() {
@@ -303,25 +335,7 @@ class App {
         readUpload(this.controls.importButton.files[0], (data) => {
             this.controls.hexData.value = hexDump(data);
             this.pokemon.deserialize(data);
-
-            // FIXME: This is pretty dumb way to do it
-            // I should write a method that fills the controls from the pokemon
-            // We could use that during initialization and it would work better too
-            this.fillDefaultSpecies();
-            this.fillDefaultLevel();
-            this.fillDefaultExp();
-            this.updatePokemonDataFromSpeciesControl();
-            this.controls.otId.value = this.pokemon.otId;
-            this.controls.otName.value = this.pokemon.otName;
-            this.controls.moves[0].move.value = this.pokemon.moves[0];
-            this.controls.moves[1].move.value = this.pokemon.moves[1];
-            this.controls.moves[2].move.value = this.pokemon.moves[2];
-            this.controls.moves[3].move.value = this.pokemon.moves[3];
-            this.controls.moves[0].pp.value = this.pokemon.getPp(0);
-            this.controls.moves[1].pp.value = this.pokemon.getPp(1);
-            this.controls.moves[2].pp.value = this.pokemon.getPp(2);
-            this.controls.moves[3].pp.value = this.pokemon.getPp(3);
-
+            this.reloadEntirePokemon();
             // Clears the file upload so that the same file can be opened again
             this.controls.importButton.value = '';
         });
