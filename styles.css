@@ -28,6 +28,10 @@ input[type=submit] {
     width: auto;
 }
 
+input[type=file] {
+    width: auto;
+}
+
 #expControl {
     width: 70px;
 }

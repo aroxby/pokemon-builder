@@ -306,7 +306,11 @@
         <legend>Data</legend>
         <div class="input">
             <input type="submit" value="Hex Dump &#8650;" id="hexRefreshControl" />
-            <input type="submit" value="Export Pokemon" id="exportControl" />
+            <input type="submit" value="Export Pokemon..." id="exportControl" />
+            <!--
+                TODO: Use a regular button and hide the default file control "Import Pokemon..."
+            -->
+            <input type="file" accept=".pk1" id="importControl" />
         </div>
         <textarea id="hexDataControl" disabled></textarea>
         </fieldset>

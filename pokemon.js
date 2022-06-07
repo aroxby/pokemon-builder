@@ -18,6 +18,15 @@ class Ivs {
 
         return serializer.data;
     }
+
+    deserialize(data) {
+        const deserializer = new Deserializer(data);
+        const bytes = deserializer.pullInt(2);
+        this.attack = bytes >> 12 & 0xF;
+        this.defense = bytes >> 8 & 0xF;
+        this.speed = bytes >> 4 & 0xF;
+        this.special = bytes >> 0 & 0xF;
+    }
 }
 
 class StatExp {
@@ -31,7 +40,7 @@ class StatExp {
 }
 
 class Pokemon {
-    constructor(species, level, exp, baseStats, nickname, otId, otName) {
+    constructor(species, level, exp, baseStats, types, nickname, otId, otName) {
         this.species = species;
         this.level = level;
         this.exp = exp;
@@ -42,7 +51,7 @@ class Pokemon {
             // MoveIds really only exists for this one line
             MoveIds.NONE, MoveIds.NONE, MoveIds.NONE, MoveIds.NONE,
         ];
-        this.types = [TypeIds.NORMAL, TypeIds.NORMAL];
+        this.types = types;
         this.nickname = nickname;
         this.otId = otId;
         this.otName = otName;
@@ -66,6 +75,7 @@ class Pokemon {
         return Math.max(Math.floor(exp), 0);
     }
 
+    // TODO: This method should live in Ivs
     rebuildHpIv() {
         const hpIv = (
             (this.ivs[StatNames.ATTACK] & 1) << 3 |
@@ -121,5 +131,38 @@ class Pokemon {
         serializer.addString(gameEncodeString(padString(this.nickname, 11)), 11);
 
         return serializer.data;
+    }
+
+    deserialize(data) {
+        const deserializer = new Deserializer(data);
+
+        deserializer.pullInt(3);  // PKHeX compatibility
+        this.species = deserializer.pullInt(1);
+        deserializer.pullInt(2);  // Current HP
+        this.level = deserializer.pullInt(1);
+        deserializer.pullInt(1);  // Status condition
+        this.types[0] = deserializer.pullInt(1);
+        this.types[1] = deserializer.pullInt(1);
+        deserializer.pullInt(1);  // Held item
+        this.moves[0] = deserializer.pullInt(1);
+        this.moves[1] = deserializer.pullInt(1);
+        this.moves[2] = deserializer.pullInt(1);
+        this.moves[3] = deserializer.pullInt(1);
+        this.otId = deserializer.pullInt(2);
+        this.exp = deserializer.pullInt(3);
+        this.statExp.hp = deserializer.pullInt(2);
+        this.statExp.attack = deserializer.pullInt(2);
+        this.statExp.defense = deserializer.pullInt(2);
+        this.statExp.speed = deserializer.pullInt(2);
+        this.statExp.special = deserializer.pullInt(2);
+        this.ivs.deserialize(deserializer.pullData(2));
+        deserializer.pullInt(1 * 4);  // Move PPs
+        deserializer.pullInt(1);  // Level again
+        deserializer.pullInt(2 * 5);  // Calculated stat values
+        this.otName = unpadString(gameDecodeString(deserializer.pullString(8)));
+        deserializer.pullInt(3);  // PKHeX compatibility
+        this.nickname = unpadString(gameDecodeString(deserializer.pullString(11)));
+
+        this.rebuildHpIv();
     }
 }

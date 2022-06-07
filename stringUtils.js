@@ -1,15 +1,21 @@
 function padString(str, desiredLength, padding = '\0') {
-    const newStr = str + padding.repeat(
-        Math.ceil(Math.max(desiredLength - str.length, 0) / padding.length)
-    );
-    return newStr;
+    return str.padEnd(desiredLength, padding);
+}
+
+function unpadString(str, padding = '\0') {
+    return str.replace(new RegExp(`${padding}*$`), '');
 }
 
 function gameEncodeString(str) {
-    const map = GameStringEncodingMap;
-    // Using a regex here feels dumb but there isn't universal replace
-    const newStr = str.replace(/./g, (ch) => map[ch] ?? map['?']);
-    return newStr;
+    return recodeString(str, GameStringEncodingMap);
+}
+
+function gameDecodeString(str) {
+    return recodeString(str, GameStringDecodingMap);
+}
+
+function recodeString(str, map) {
+    return [...str].map((ch) => map[ch] ?? map['?']).join('');
 }
 
 const GameStringEncodingMap = {
@@ -93,4 +99,88 @@ const GameStringEncodingMap = {
     "7": '\xfd',
     "8": '\xfe',
     "9": '\xff',
+};
+
+const GameStringDecodingMap = {
+    // TODO: Deal with {Pk}, {Mn}, and ×
+    '\x50': "\0",
+    '\x7f': " ",
+    '\x80': "A",
+    '\x81': "B",
+    '\x82': "C",
+    '\x83': "D",
+    '\x84': "E",
+    '\x85': "F",
+    '\x86': "G",
+    '\x87': "H",
+    '\x88': "I",
+    '\x89': "J",
+    '\x8a': "K",
+    '\x8b': "L",
+    '\x8c': "M",
+    '\x8d': "N",
+    '\x8e': "O",
+    '\x8f': "P",
+    '\x90': "Q",
+    '\x91': "R",
+    '\x92': "S",
+    '\x93': "T",
+    '\x94': "U",
+    '\x95': "V",
+    '\x96': "W",
+    '\x97': "X",
+    '\x98': "Y",
+    '\x99': "Z",
+    '\x9a': "(",
+    '\x9b': ")",
+    '\x9c': ":",
+    '\x9d': ";",
+    '\x9e': "[",
+    '\x9f': "]",
+    '\xa0': "a",
+    '\xa1': "b",
+    '\xa2': "c",
+    '\xa3': "d",
+    '\xa4': "e",
+    '\xa5': "f",
+    '\xa6': "g",
+    '\xa7': "h",
+    '\xa8': "i",
+    '\xa9': "j",
+    '\xaa': "k",
+    '\xab': "l",
+    '\xac': "m",
+    '\xad': "n",
+    '\xae': "o",
+    '\xaf': "p",
+    '\xb0': "q",
+    '\xb1': "r",
+    '\xb2': "s",
+    '\xb3': "t",
+    '\xb4': "u",
+    '\xb5': "v",
+    '\xb6': "w",
+    '\xb7': "x",
+    '\xb8': "y",
+    '\xb9': "z",
+    '\xe0': "'",
+    '\xe3': "-",
+    '\xe6': "?",
+    '\xe7': "!",
+    '\xe8': ".",
+    '\xef': "♂",
+    '\xf0': "¥",
+    '\xf3': "/",
+    '\xf4': ",",
+    '\xf5': "♀",
+    '\xf6': "0",
+    '\xf7': "1",
+    '\xf8': "2",
+    '\xf9': "3",
+    '\xfa': "4",
+    '\xfb': "5",
+    '\xfc': "6",
+    '\xfd': "7",
+    '\xfe': "8",
+    '\xff': "9",
 };
