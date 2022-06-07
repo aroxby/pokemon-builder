@@ -298,4 +298,17 @@ class App {
         const data = this.pokemon.serialize();
         pushDownload(filename, data);
     }
+
+    readPokemonUpload() {
+        readUpload(this.controls.importButton.files[0], (data) => {
+            this.controls.hexData.value = hexDump(data);
+            this.pokemon.deserialize(data);
+
+            // FIXME: This doesn't update all the controls
+            this.updateTypes(this.pokemon.types);
+            this.updateStats(this.pokemon);
+            this.updateExp(this.pokemon.calcExp());
+            this.controls.otName.value = this.pokemon.otName;
+        });
+    }
 };
