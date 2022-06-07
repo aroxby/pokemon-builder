@@ -304,11 +304,26 @@ class App {
             this.controls.hexData.value = hexDump(data);
             this.pokemon.deserialize(data);
 
-            // FIXME: This doesn't update all the controls
-            this.updateTypes(this.pokemon.types);
-            this.updateStats(this.pokemon);
-            this.updateExp(this.pokemon.calcExp());
+            // FIXME: This is pretty dumb way to do it
+            // I should write a method that fills the controls from the pokemon
+            // We could use that during initialization and it would work better too
+            this.fillDefaultSpecies();
+            this.fillDefaultLevel();
+            this.fillDefaultExp();
+            this.updatePokemonDataFromSpeciesControl();
+            this.controls.otId.value = this.pokemon.otId;
             this.controls.otName.value = this.pokemon.otName;
+            this.controls.moves[0].move.value = this.pokemon.moves[0];
+            this.controls.moves[1].move.value = this.pokemon.moves[1];
+            this.controls.moves[2].move.value = this.pokemon.moves[2];
+            this.controls.moves[3].move.value = this.pokemon.moves[3];
+            this.controls.moves[0].pp.value = this.pokemon.getPp(0);
+            this.controls.moves[1].pp.value = this.pokemon.getPp(1);
+            this.controls.moves[2].pp.value = this.pokemon.getPp(2);
+            this.controls.moves[3].pp.value = this.pokemon.getPp(3);
+
+            // Clears the file upload so that the same file can be opened again
+            this.controls.importButton.value = '';
         });
     }
 };
