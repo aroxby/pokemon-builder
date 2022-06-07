@@ -17,6 +17,7 @@ class App {
             hexRefesh: document.getElementById('hexRefreshControl'),
             hexData: document.getElementById('hexDataControl'),
             exportButton: document.getElementById('exportControl'),
+            importButton: document.getElementById('importControl'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -150,6 +151,7 @@ class App {
 
         this.controls.hexRefesh.onclick = () => this.hexDumpPokemon();
         this.controls.exportButton.onclick = () => this.createPokemonDownload();
+        this.controls.importButton.onchange = () => this.readPokemonUpload();
     }
 
     updatePokemonExp() {
