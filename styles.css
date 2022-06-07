@@ -24,7 +24,7 @@ input {
     width: 55px;
 }
 
-input[type=submit] {
+input[type=button] {
     width: auto;
 }
 
