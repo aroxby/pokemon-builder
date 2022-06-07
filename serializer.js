@@ -26,6 +26,34 @@ class Serializer {
     }
 }
 
+class Deserializer {
+    constructor(data) {
+        this.data = data;
+        this.position = 0;
+    }
+
+    pullInt(byteLength) {
+        let result = 0;
+        while(byteLength--) {
+            result <<= 8;
+            const byte = this.data[this.position++];
+            result |= byte;
+        }
+        return result;
+    }
+
+    pullString(byteLength) {
+        const result = String.fromCharCode(...this.pullData(byteLength));
+        return result;
+    }
+
+    pullData(byteLength) {
+        const result = this.data.slice(this.position, this.position + byteLength);
+        this.position += byteLength;
+        return result;
+    }
+}
+
 function hexDump(data) {
     let str = '';
     for(const byte of data) {
@@ -42,4 +70,12 @@ function pushDownload(filename, data) {
     link.setAttribute('download', filename);
 
     link.click();
+}
+
+function readUpload(file, callback) {
+    const reader = new FileReader();
+    reader.onload = () => {
+        callback(new Uint8Array(reader.result));
+    }
+    reader.readAsArrayBuffer(file);
 }
