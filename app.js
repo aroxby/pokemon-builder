@@ -211,7 +211,7 @@ class App {
         const rawlevel = Number(this.controls.level.value);
         const level = Math.round(clamp(rawlevel, 0, 255));
         this.updateLevel(level);
-        this.updatePokemonDataFromLevel(this.pokemon.species, level);
+        this.updatePokemonDataFromLevel(level);
     }
 
     updatePokemonDataFromStatExpControl(statName) {
@@ -263,7 +263,7 @@ class App {
         this.updateExp(this.pokemon.calcExp());
     }
 
-    updatePokemonDataFromLevel(species, level) {
+    updatePokemonDataFromLevel(level) {
         this.pokemon.level = level;
         this.updateExp(this.pokemon.calcExp());
         this.reloadPokemonStats();
