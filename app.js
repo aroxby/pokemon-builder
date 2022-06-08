@@ -19,6 +19,7 @@ class App {
             exportButton: document.getElementById('exportControl'),
             importButton: document.getElementById('importControl'),
             importWrapper: document.getElementById('importWrapper'),
+            sprite: document.getElementById('sprite'),
         };
         for(const statName of Object.values(StatNames)) {
             this.controls.baseStats[statName] = document.getElementById(
@@ -121,6 +122,7 @@ class App {
         this.reloadPokemonNickname();
         this.reloadPokemonTypes();
         this.reloadPokemonStats();
+        this.updatePokemonSprite();
     }
 
     reloadPokemonSpecies() {
@@ -197,6 +199,7 @@ class App {
         const pokedexNumber = this.controls.species.selectedIndex + 1;
         this.updatePokemonDataFromSpecies(species, pokedexNumber);
         this.updateNicknameFromSpecies(species);
+        this.updatePokemonSprite();
     }
 
     updateNicknameFromSpecies(species) {
@@ -264,6 +267,11 @@ class App {
         this.pokemon.level = level;
         this.updateExp(this.pokemon.calcExp());
         this.reloadPokemonStats();
+    }
+
+    updatePokemonSprite() {
+        const spriteUrl = getSpriteUrl(this.pokemon.species);
+        this.controls.sprite.src = spriteUrl;
     }
 
     updateExp(exp) {

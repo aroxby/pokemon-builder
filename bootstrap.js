@@ -42,6 +42,7 @@ const requiredFiles = [
     'pokemonIds.js',
     'pokemonTypes.js',
     'serializer.js',
+    'sprites.js',
     'stats.js',
     'stringUtils.js',
     'typeIds.js',

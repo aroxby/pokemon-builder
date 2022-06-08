@@ -52,3 +52,9 @@ input[type=file] {
 .trainer {
     width: 65px;
 }
+
+#sprite {
+    vertical-align: text-bottom;
+    width:48px;
+    height:48px;
+}
